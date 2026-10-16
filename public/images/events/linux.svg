@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="100%" stop-color="#1e293b"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="450" fill="url(#bgGrad3)"/>
+  
+  <rect x="50" y="40" width="160" height="28" rx="4" fill="#334155" opacity="0.9"/>
+  <text x="130" y="59" fill="#f8fafc" font-family="system-ui, sans-serif" font-size="12" font-weight="700" text-anchor="middle" letter-spacing="1">SYSTEMS TECH TALK</text>
+
+  <text x="50" y="115" fill="#38bdf8" font-family="system-ui, sans-serif" font-size="14" font-weight="600" letter-spacing="1.5">KERNEL &amp; RUNTIME INTERNALS</text>
+  <text x="50" y="160" fill="#ffffff" font-family="system-ui, sans-serif" font-size="32" font-weight="800">Linux Internals &amp; System Calls</text>
+  <text x="50" y="200" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="16">Process Lifecycle, Virtual Memory &amp; eBPF Observability</text>
+
+  <!-- Terminal Window Graphic -->
+  <g transform="translate(530, 100)">
+    <rect x="0" y="0" width="220" height="150" rx="6" fill="#0f172a" stroke="#475569" stroke-width="1.5"/>
+    <rect x="0" y="0" width="220" height="24" rx="6" fill="#1e293b"/>
+    <circle cx="14" cy="12" r="4" fill="#ef4444"/>
+    <circle cx="28" cy="12" r="4" fill="#f59e0b"/>
+    <circle cx="42" cy="12" r="4" fill="#10b981"/>
+    <text x="12" y="48" fill="#38bdf8" font-family="monospace" font-size="11">$ strace -e trace=open,read</text>
+    <text x="12" y="70" fill="#22c55e" font-family="monospace" font-size="11">openat(AT_FDCWD, 3) = 0</text>
+    <text x="12" y="92" fill="#94a3b8" font-family="monospace" font-size="11">read(3, buffer, 4096) = 4096</text>
+    <text x="12" y="114" fill="#e2e8f0" font-family="monospace" font-size="11">mmap(NULL, 0x1000) = OK</text>
+  </g>
+
+  <line x1="50" y1="360" x2="750" y2="360" stroke="#334155" stroke-width="1"/>
+  <text x="50" y="395" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="13">DATE &amp; TIME</text>
+  <text x="50" y="420" fill="#ffffff" font-family="system-ui, sans-serif" font-size="15" font-weight="600">November 05, 2026 • 02:00 PM IST</text>
+
+  <text x="320" y="395" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="13">VENUE</text>
+  <text x="320" y="420" fill="#ffffff" font-family="system-ui, sans-serif" font-size="15" font-weight="600">Sarvepalli Radhakrishnan Auditorium</text>
+
+  <text x="620" y="395" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="13">FORMAT</text>
+  <text x="620" y="420" fill="#38bdf8" font-family="system-ui, sans-serif" font-size="15" font-weight="600">Hybrid (In-Person + Live Stream)</text>
+</svg>

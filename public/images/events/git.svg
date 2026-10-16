@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad4" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#14213d"/>
+      <stop offset="100%" stop-color="#1e293b"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="450" fill="url(#bgGrad4)"/>
+  
+  <rect x="50" y="40" width="160" height="28" rx="4" fill="#0284c7" opacity="0.9"/>
+  <text x="130" y="59" fill="#ffffff" font-family="system-ui, sans-serif" font-size="12" font-weight="700" text-anchor="middle" letter-spacing="1">OPEN SOURCE CLINIC</text>
+
+  <text x="50" y="115" fill="#38bdf8" font-family="system-ui, sans-serif" font-size="14" font-weight="600" letter-spacing="1.5">COLLABORATIVE SOFTWARE CRAFT</text>
+  <text x="50" y="160" fill="#ffffff" font-family="system-ui, sans-serif" font-size="32" font-weight="800">Version Control &amp; First PR Clinic</text>
+  <text x="50" y="200" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="16">Branching strategies, conflict resolution &amp; OSS contribution pathways</text>
+
+  <!-- Git Branch Diagram Graphic -->
+  <g transform="translate(560, 160)">
+    <line x1="-80" y1="0" x2="80" y2="0" stroke="#38bdf8" stroke-width="3"/>
+    <circle cx="-80" cy="0" r="8" fill="#38bdf8"/>
+    <circle cx="-20" cy="0" r="8" fill="#38bdf8"/>
+    <circle cx="80" cy="0" r="8" fill="#38bdf8"/>
+
+    <path d="M -20 0 C 0 -40, 20 -40, 50 -40" fill="none" stroke="#f59e0b" stroke-width="3"/>
+    <circle cx="20" cy="-40" r="8" fill="#f59e0b"/>
+    <circle cx="50" cy="-40" r="8" fill="#f59e0b"/>
+    
+    <path d="M 50 -40 C 70 -40, 70 0, 80 0" fill="none" stroke="#10b981" stroke-width="3"/>
+    <text x="0" y="40" fill="#94a3b8" font-family="monospace" font-size="13">main &lt;- feature-branch</text>
+  </g>
+
+  <line x1="50" y1="360" x2="750" y2="360" stroke="#334155" stroke-width="1"/>
+  <text x="50" y="395" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="13">DATE &amp; TIME</text>
+  <text x="50" y="420" fill="#ffffff" font-family="system-ui, sans-serif" font-size="15" font-weight="600">September 18, 2026 • 01:30 PM IST</text>
+
+  <text x="320" y="395" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="13">VENUE</text>
+  <text x="320" y="420" fill="#ffffff" font-family="system-ui, sans-serif" font-size="15" font-weight="600">CSE Department Lab 3, IARE</text>
+
+  <text x="620" y="395" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="13">STATUS</text>
+  <text x="620" y="420" fill="#94a3b8" font-family="system-ui, sans-serif" font-size="15" font-weight="600">Concluded (85 Contributions)</text>
+</svg>
