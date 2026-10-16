@@ -4,8 +4,8 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { Menu, X, ArrowUpRight } from "lucide-react";
-import { NAVIGATION_LINKS, CHAPTER_INFO } from "@/data/chapter";
+import { Menu, X } from "lucide-react";
+import { NAVIGATION_LINKS } from "@/data/chapter";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/utils";
 
@@ -33,7 +33,7 @@ export function Navbar() {
     };
   }, [mobileMenuOpen]);
 
-  // Do not render public Navbar or top affiliation bar on Admin portal pages
+  // Do not render public Navbar on Admin portal pages
   if (pathname?.startsWith("/admin")) {
     return null;
   }
@@ -48,40 +48,8 @@ export function Navbar() {
         Skip to main content
       </a>
 
-      {/* Top Academic Affiliation Bar */}
+      {/* Main Navigation Header */}
       <header className="sticky top-0 z-40 bg-white border-b border-slate-200">
-        <div className="bg-[#14213d] text-slate-300 text-xs py-1.5 px-4 sm:px-6 lg:px-8 border-b border-slate-800">
-          <div className="max-w-7xl mx-auto flex items-center justify-between">
-            <div className="flex items-center gap-2 truncate">
-              <span className="inline-block w-2 h-2 rounded-full bg-emerald-400"></span>
-              <span className="font-medium text-white truncate">
-                Institute of Aeronautical Engineering (Autonomous)
-              </span>
-              <span className="hidden md:inline text-slate-400">• NAAC &apos;A++&apos; • JNTUH Affiliated</span>
-            </div>
-            <div className="flex items-center gap-4 text-xs shrink-0">
-              <a
-                href={CHAPTER_INFO.socials.iareWebsite}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hidden sm:inline-flex items-center gap-1 hover:text-white transition-colors"
-              >
-                IARE Portal <ArrowUpRight className="w-3 h-3" />
-              </a>
-              <span className="hidden sm:inline text-slate-600">|</span>
-              <a
-                href={CHAPTER_INFO.socials.acmGlobal}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 hover:text-white transition-colors"
-              >
-                ACM Global <ArrowUpRight className="w-3 h-3" />
-              </a>
-            </div>
-          </div>
-        </div>
-
-        {/* Main Navbar */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20">
             {/* Logo and Brand Title */}
@@ -162,7 +130,7 @@ export function Navbar() {
         {/* Mobile Navigation Drawer Overlay */}
         {mobileMenuOpen && (
           <div
-            className="fixed inset-0 top-[110px] z-50 bg-slate-900/40 backdrop-blur-xs lg:hidden"
+            className="fixed inset-0 top-20 z-50 bg-slate-900/40 backdrop-blur-xs lg:hidden"
             onClick={() => setMobileMenuOpen(false)}
             aria-hidden="true"
           />
@@ -171,7 +139,7 @@ export function Navbar() {
         {/* Mobile Navigation Menu Panel */}
         <div
           className={cn(
-            "fixed top-[110px] right-0 bottom-0 z-50 w-full max-w-sm bg-white border-l border-slate-200 shadow-xl p-6 flex flex-col justify-between transition-transform duration-200 ease-in-out lg:hidden",
+            "fixed top-20 right-0 bottom-0 z-50 w-full max-w-sm bg-white border-l border-slate-200 shadow-xl p-6 flex flex-col justify-between transition-transform duration-200 ease-in-out lg:hidden",
             mobileMenuOpen ? "translate-x-0" : "translate-x-full"
           )}
           role="dialog"
