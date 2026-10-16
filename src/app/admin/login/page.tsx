@@ -85,7 +85,7 @@ export default function AdminLoginPage() {
               <Lock className="w-4 h-4 text-slate-400 absolute right-3 top-2.5" />
             </div>
             <p className="text-[11px] text-slate-400 mt-1">
-              Default development password: <code className="bg-slate-100 px-1 py-0.5 rounded font-mono text-slate-700">acmiare2026admin</code>
+              Authorized chapter administrators and coordinators only.
             </p>
           </div>
 
