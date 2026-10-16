@@ -6,6 +6,7 @@ import {
   Calendar,
   PlusCircle,
   Users,
+  Award,
   ExternalLink,
 } from "lucide-react";
 import { AdminLogoutButton } from "@/components/admin/AdminLogoutButton";
@@ -72,6 +73,13 @@ export default function AdminLayout({
               >
                 <Users className="w-3.5 h-3.5" />
                 Registrations
+              </Link>
+              <Link
+                href="/admin/certificates"
+                className="px-3 py-1.5 rounded-md text-slate-300 hover:text-white hover:bg-slate-800/80 transition-colors flex items-center gap-1.5"
+              >
+                <Award className="w-3.5 h-3.5 text-amber-400" />
+                <span>Certificates</span>
               </Link>
             </nav>
 

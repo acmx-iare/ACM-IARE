@@ -179,3 +179,77 @@ export interface MembershipSubmission {
   technicalInterests: string[];
   statementOfPurpose: string;
 }
+
+export type CertificateStatus = "valid" | "revoked";
+export type CertificateType = "participation" | "winner" | "runner_up" | "appreciation" | "speaker" | "coordinator";
+
+export interface CertificateSignatory {
+  name: string;
+  role: string;
+  title?: string;
+  signatureUrl?: string;
+}
+
+export interface CertificateTemplate {
+  id: string;
+  name: string;
+  description?: string;
+  type: CertificateType;
+  title: string;
+  subtitle?: string;
+  bodyTemplate: string;
+  issuerOrganization: string;
+  signatories: CertificateSignatory[];
+  branding: {
+    primaryColor?: string;
+    accentColor?: string;
+    ribbonText?: string;
+    logoUrl?: string;
+  };
+  layout: {
+    orientation?: "landscape" | "portrait";
+    borderStyle?: string;
+  };
+  isActive: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface IssuedCertificate {
+  id: string;
+  certificateNumber: string;
+  eventId?: string;
+  registrationId?: string;
+  templateId?: string;
+  recipientName: string;
+  recipientEmail: string;
+  recipientRollNumber?: string;
+  recipientDepartment?: string;
+  eventTitle: string;
+  eventDate?: string;
+  certificateType: CertificateType;
+  status: CertificateStatus;
+  revokedAt?: string | null;
+  revokedReason?: string | null;
+  pdfStorageKey: string;
+  pdfFileSize?: number;
+  qrVerificationUrl: string;
+  issuedAt: string;
+  issuedBy?: string;
+}
+
+export interface CertificateVerificationResult {
+  status: "valid" | "revoked" | "not_found";
+  certificate?: {
+    certificateNumber: string;
+    recipientName: string;
+    eventTitle: string;
+    eventDate?: string;
+    certificateType: CertificateType;
+    issuedAt: string;
+    issuerOrganization?: string;
+    revokedAt?: string | null;
+    revokedReason?: string | null;
+  };
+  verificationMessage?: string;
+}

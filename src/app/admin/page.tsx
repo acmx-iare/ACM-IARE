@@ -6,14 +6,14 @@ import {
   FileSpreadsheet,
   Users,
   PlusCircle,
-  ExternalLink,
-  CheckCircle2,
-  AlertTriangle,
   ArrowRight,
+  ExternalLink,
   Sparkles,
+  Award,
 } from "lucide-react";
 import { isAuthenticatedAdmin } from "@/lib/admin-auth";
 import { getAllEvents, getRegistrations } from "@/lib/events-store";
+import { sql } from "@/lib/db";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { formatDate } from "@/lib/utils";
@@ -50,6 +50,14 @@ async function AdminDashboardContent() {
   const totalRegistrations = registrations.length;
   const isGasConfigured = Boolean(process.env.GOOGLE_APPS_SCRIPT_URL);
 
+  let certCount = 0;
+  try {
+    const certRows = await sql`SELECT count(*) FROM issued_certificates WHERE status = 'valid'`;
+    certCount = Number(certRows[0]?.count || 0);
+  } catch {
+    certCount = 0;
+  }
+
   const recentEvents = [...events].reverse().slice(0, 5);
 
   return (
@@ -58,10 +66,10 @@ async function AdminDashboardContent() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-200">
         <div>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-[#14213d] tracking-tight">
-            Event Automation Overview
+            Event Automation &amp; Certificate Console
           </h1>
           <p className="text-xs sm:text-sm text-slate-500 mt-1">
-            Automated Google Forms provisioning, registration sync, and Google Sheets registry.
+            Automated Google Forms provisioning, Neon PostgreSQL registry, and Cloudflare R2 certificate management.
           </p>
         </div>
 
@@ -82,7 +90,12 @@ async function AdminDashboardContent() {
             {isGasConfigured ? "Google Apps Script: Live" : "Local Event Store Mode"}
           </div>
 
-          <Button href="/admin/events/new" variant="secondary" size="sm">
+          <Button href="/admin/certificates" variant="secondary" size="sm">
+            <Award className="w-4 h-4 text-amber-500" />
+            Certificates
+          </Button>
+
+          <Button href="/admin/events/new" variant="primary" size="sm">
             <PlusCircle className="w-4 h-4" />
             New Event
           </Button>
@@ -134,7 +147,7 @@ async function AdminDashboardContent() {
               {totalRegistrations}
             </span>
             <span className="text-[11px] text-slate-500 mt-0.5 block">
-              Logged in Sheets registry
+              Neon &amp; Sheets Registry
             </span>
           </div>
           <div className="w-10 h-10 rounded-md bg-emerald-50 text-emerald-600 flex items-center justify-center">
@@ -145,21 +158,17 @@ async function AdminDashboardContent() {
         <div className="bg-white border border-slate-200 rounded-lg p-5 shadow-xs flex items-center justify-between">
           <div>
             <span className="text-xs font-semibold text-slate-400 block uppercase">
-              Backend Integration
+              Issued Certificates
             </span>
-            <span className="text-base font-bold text-[#14213d] block mt-1">
-              {isGasConfigured ? "Connected" : "Local Cache"}
+            <span className="text-2xl font-extrabold text-[#14213d] block mt-1">
+              {certCount}
             </span>
-            <span className="text-[11px] text-slate-500 mt-0.5 block">
-              Google Sheets &amp; Forms
+            <span className="text-[11px] text-emerald-600 mt-0.5 block font-medium">
+              Neon &amp; R2 Verified
             </span>
           </div>
-          <div className="w-10 h-10 rounded-md bg-slate-100 text-slate-600 flex items-center justify-center">
-            {isGasConfigured ? (
-              <CheckCircle2 className="w-5 h-5 text-emerald-600" />
-            ) : (
-              <AlertTriangle className="w-5 h-5 text-amber-500" />
-            )}
+          <div className="w-10 h-10 rounded-md bg-amber-50 text-amber-600 flex items-center justify-center">
+            <Award className="w-5 h-5" />
           </div>
         </div>
       </div>
