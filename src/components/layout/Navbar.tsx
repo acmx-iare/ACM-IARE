@@ -33,8 +33,8 @@ export function Navbar() {
     };
   }, [mobileMenuOpen]);
 
-  // Do not render public Navbar on Admin portal pages
-  if (pathname?.startsWith("/admin")) {
+  // Do not render public Navbar on Admin or Studio portal pages
+  if (pathname?.startsWith("/admin") || pathname?.startsWith("/studio")) {
     return null;
   }
 

@@ -7,6 +7,7 @@ import {
   PlusCircle,
   Users,
   Award,
+  Shield,
   ExternalLink,
 } from "lucide-react";
 import { AdminLogoutButton } from "@/components/admin/AdminLogoutButton";
@@ -81,16 +82,31 @@ export default function AdminLayout({
                 <Award className="w-3.5 h-3.5 text-amber-400" />
                 <span>Certificates</span>
               </Link>
+              <Link
+                href="/admin/security"
+                className="px-3 py-1.5 rounded-md text-slate-300 hover:text-white hover:bg-slate-800/80 transition-colors flex items-center gap-1.5"
+              >
+                <Shield className="w-3.5 h-3.5 text-blue-400" />
+                <span>Security</span>
+              </Link>
             </nav>
 
             {/* Right: Actions */}
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <Link
+                href="/studio"
+                className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold rounded bg-purple-600/30 border border-purple-400/40 text-purple-200 hover:bg-purple-600/50 hover:text-white transition-colors"
+                title="Manage public website content"
+              >
+                <span>Studio CMS</span>
+              </Link>
+
               <Link
                 href="/"
                 target="_blank"
                 className="hidden sm:inline-flex items-center gap-1 px-2.5 py-1 text-xs font-medium rounded text-slate-300 hover:text-white hover:bg-slate-800 transition-colors"
               >
-                <span>View Public Site</span>
+                <span>View Site</span>
                 <ExternalLink className="w-3 h-3" />
               </Link>
 

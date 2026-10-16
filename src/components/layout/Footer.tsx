@@ -10,8 +10,8 @@ import { CHAPTER_INFO, NAVIGATION_LINKS, TECHNICAL_SIGS } from "@/data/chapter";
 export function Footer() {
   const pathname = usePathname();
 
-  // Do not render public footer on admin pages
-  if (pathname?.startsWith("/admin")) {
+  // Do not render public footer on admin or studio pages
+  if (pathname?.startsWith("/admin") || pathname?.startsWith("/studio")) {
     return null;
   }
 

@@ -1,9 +1,11 @@
 import React from "react";
 import { Users, ShieldCheck, Award, FileCode } from "lucide-react";
 import { CHAPTER_TEAM } from "@/data/chapter";
+import { TeamMember } from "@/types";
 import { MemberCard } from "@/components/team/MemberCard";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { Button } from "@/components/ui/Button";
+import { getCmsPublishedContent } from "@/lib/cms-store";
 
 export const metadata = {
   title: "Chapter Team & Executive Council",
@@ -12,10 +14,30 @@ export const metadata = {
 };
 
 export default function TeamPage() {
-  const facultyMembers = CHAPTER_TEAM.filter((m) => m.category === "Faculty");
-  const officeBearers = CHAPTER_TEAM.filter((m) => m.category === "Office Bearers");
-  const technicalLeads = CHAPTER_TEAM.filter((m) => m.category === "Technical Leads");
-  const committeeLeads = CHAPTER_TEAM.filter((m) => m.category === "Committee Leads");
+  return (
+    <React.Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center text-xs text-slate-400">
+          Loading chapter team...
+        </div>
+      }
+    >
+      <TeamPageContent />
+    </React.Suspense>
+  );
+}
+
+async function TeamPageContent() {
+  const cms = await getCmsPublishedContent("team");
+  const membersList: TeamMember[] =
+    cms.members && cms.members.length > 0 ? cms.members : CHAPTER_TEAM;
+
+  const facultyMembers = membersList.filter((m) => m.category === "Faculty");
+  const officeBearers = membersList.filter((m) => m.category === "Office Bearers");
+  const technicalLeads = membersList.filter((m) => m.category === "Technical Leads");
+  const committeeLeads = membersList.filter((m) => m.category === "Committee Leads");
+
+  const hero = cms.hero || {};
 
   return (
     <div className="flex flex-col min-h-screen bg-slate-50">
@@ -25,13 +47,14 @@ export default function TeamPage() {
           <div className="max-w-3xl space-y-3">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-800 border border-blue-200">
               <Users className="w-3.5 h-3.5 text-blue-600" />
-              Leadership &amp; Advisory Council
+              {hero.badge || "Leadership & Advisory Council"}
             </div>
             <h1 className="text-3xl sm:text-4xl font-extrabold text-[#14213d] tracking-tight">
-              Chapter Team &amp; Office Bearers
+              {hero.title || "Chapter Team & Office Bearers"}
             </h1>
             <p className="text-base text-slate-600 leading-relaxed">
-              The ACM Student Chapter at IARE is guided by dedicated faculty scholars and operated by democratically elected student officers committed to technical service and academic integrity.
+              {hero.description ||
+                "The ACM Student Chapter at IARE is guided by dedicated faculty scholars and operated by democratically elected student officers committed to technical service and academic integrity."}
             </p>
           </div>
         </div>

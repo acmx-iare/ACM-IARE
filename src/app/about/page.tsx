@@ -14,6 +14,7 @@ import {
 import { CHAPTER_INFO, TECHNICAL_SIGS, FREQUENTLY_ASKED_QUESTIONS } from "@/data/chapter";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { Button } from "@/components/ui/Button";
+import { getCmsPublishedContent } from "@/lib/cms-store";
 
 export const metadata = {
   title: "About the Chapter",
@@ -22,6 +23,26 @@ export const metadata = {
 };
 
 export default function AboutPage() {
+  return (
+    <React.Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center text-xs text-slate-400">
+          Loading chapter overview...
+        </div>
+      }
+    >
+      <AboutPageContent />
+    </React.Suspense>
+  );
+}
+
+async function AboutPageContent() {
+  const cms = await getCmsPublishedContent("about");
+  const hero = cms.hero || {};
+  const narrative = cms.narrative || {};
+  const mission = cms.mission || CHAPTER_INFO.mission;
+  const vision = cms.vision || CHAPTER_INFO.vision;
+
   return (
     <div className="flex flex-col">
       {/* Header Banner */}
@@ -33,10 +54,11 @@ export default function AboutPage() {
               Institutional Profile &amp; Charter
             </div>
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#14213d] tracking-tight">
-              About ACM Student Chapter at IARE
+              {hero.title || "About ACM Student Chapter at IARE"}
             </h1>
             <p className="text-base sm:text-lg text-slate-600 leading-relaxed">
-              Established in 2018, the chapter serves as the collegiate center of computing excellence at the Institute of Aeronautical Engineering, bridging foundational theory with software engineering practice.
+              {hero.tagline ||
+                "Established in 2018, the chapter serves as the collegiate center of computing excellence at the Institute of Aeronautical Engineering, bridging foundational theory with software engineering practice."}
             </p>
           </div>
         </div>
@@ -135,7 +157,7 @@ export default function AboutPage() {
               </div>
               <h2 className="text-xl font-bold text-[#14213d] mb-3">Our Mission</h2>
               <p className="text-sm text-slate-600 leading-relaxed">
-                {CHAPTER_INFO.mission}
+                {mission}
               </p>
               <ul className="mt-4 space-y-2 text-xs text-slate-700">
                 <li className="flex items-center gap-2">
@@ -159,7 +181,7 @@ export default function AboutPage() {
               </div>
               <h2 className="text-xl font-bold text-[#14213d] mb-3">Our Vision</h2>
               <p className="text-sm text-slate-600 leading-relaxed">
-                {CHAPTER_INFO.vision}
+                {vision}
               </p>
               <ul className="mt-4 space-y-2 text-xs text-slate-700">
                 <li className="flex items-center gap-2">

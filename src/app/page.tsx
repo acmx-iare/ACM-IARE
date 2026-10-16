@@ -19,13 +19,52 @@ import { Button } from "@/components/ui/Button";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { EventCard } from "@/components/events/EventCard";
 import { MemberCard } from "@/components/team/MemberCard";
+import { getCmsPublishedContent } from "@/lib/cms-store";
 
 export default function HomePage() {
+  return (
+    <React.Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center text-xs text-slate-400">
+          Loading ACM IARE portal...
+        </div>
+      }
+    >
+      <HomePageContent />
+    </React.Suspense>
+  );
+}
+
+async function HomePageContent() {
+  const cms = await getCmsPublishedContent("home");
   const upcomingEvents = CHAPTER_EVENTS.filter((e) => e.status === "upcoming").slice(0, 3);
   const featuredTeam = CHAPTER_TEAM.slice(0, 4);
 
+  const hero = cms.hero || {};
+  const announcement = cms.announcement || {};
+
   return (
     <div className="flex flex-col">
+      {/* Optional Top Announcement Strip managed via /studio */}
+      {announcement.enabled && announcement.text && (
+        <div className="bg-[#14213d] text-white border-b border-slate-800 py-2.5 px-4 text-center text-xs">
+          <div className="max-w-7xl mx-auto flex items-center justify-center gap-2 flex-wrap">
+            <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-600 text-white uppercase tracking-wider">
+              {announcement.badge || "Announcement"}
+            </span>
+            <span className="font-medium text-slate-200">{announcement.text}</span>
+            {announcement.linkHref && (
+              <Link
+                href={announcement.linkHref}
+                className="font-bold text-blue-400 hover:text-blue-300 underline inline-flex items-center gap-0.5 ml-1"
+              >
+                {announcement.linkText || "Learn More &rarr;"}
+              </Link>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* 1. Academic Hero Section */}
       <section className="relative bg-gradient-to-b from-slate-50 via-white to-slate-50/50 border-b border-slate-200 py-16 sm:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -35,27 +74,28 @@ export default function HomePage() {
             <div className="lg:col-span-7 space-y-6">
               <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold bg-blue-50 text-blue-800 border border-blue-200/80">
                 <span className="w-2 h-2 rounded-full bg-blue-600"></span>
-                Official Chapter ID • Established 2018
+                {hero.badge || "Official Chapter ID • Established 2018"}
               </div>
 
               <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#14213d] tracking-tight leading-[1.15]">
-                Advancing Computing as a Science &amp; Profession at{" "}
-                <span className="text-blue-600">IARE</span>
+                {hero.titlePrefix || "Advancing Computing as a Science & Profession at"}{" "}
+                <span className="text-blue-600">{hero.highlightedWord || "IARE"}</span>
               </h1>
 
               <p className="text-base sm:text-lg text-slate-600 leading-relaxed max-w-2xl font-normal">
-                The ACM Student Chapter at the Institute of Aeronautical Engineering unites passionate student developers, researchers, and faculty mentors. We foster computer science fundamentals, algorithmic problem solving, open source contributions, and ethical engineering.
+                {hero.description ||
+                  "The ACM Student Chapter at the Institute of Aeronautical Engineering unites passionate student developers, researchers, and faculty mentors. We foster computer science fundamentals, algorithmic problem solving, open source contributions, and ethical engineering."}
               </p>
 
               {/* Action Buttons */}
               <div className="flex flex-wrap items-center gap-3.5 pt-2">
-                <Button href="/events" variant="secondary" size="lg">
+                <Button href={hero.primaryButtonLink || "/events"} variant="secondary" size="lg">
                   <Calendar className="w-4 h-4" />
-                  Explore Events Calendar
+                  {hero.primaryButtonText || "Explore Events Calendar"}
                 </Button>
-                <Button href="/contact#join" variant="outline" size="lg">
+                <Button href={hero.secondaryButtonLink || "/contact#join"} variant="outline" size="lg">
                   <Users className="w-4 h-4" />
-                  Join Chapter
+                  {hero.secondaryButtonText || "Join Chapter"}
                 </Button>
               </div>
 

@@ -1,9 +1,24 @@
 import { NextResponse } from "next/server";
-import { isAuthenticatedAdmin, setAdminSession, clearAdminSession } from "@/lib/admin-auth";
+import {
+  isAuthenticatedAdmin,
+  getAuthenticatedAdminUser,
+  setAdminSession,
+  clearAdminSession,
+} from "@/lib/admin-auth";
 
-export async function GET() {
-  const isAuth = await isAuthenticatedAdmin();
-  return NextResponse.json({ authenticated: isAuth });
+export async function GET(request: Request) {
+  const user = await getAuthenticatedAdminUser();
+  return NextResponse.json({
+    authenticated: Boolean(user && user.isActive),
+    user: user
+      ? {
+          username: user.username,
+          email: user.email,
+          role: user.role,
+          fullName: user.fullName,
+        }
+      : null,
+  });
 }
 
 export async function POST(request: Request) {
@@ -13,9 +28,12 @@ export async function POST(request: Request) {
       return NextResponse.json({ success: false, error: "Password required" }, { status: 400 });
     }
 
-    const success = await setAdminSession(password);
-    if (!success) {
-      return NextResponse.json({ success: false, error: "Invalid administrator credentials" }, { status: 401 });
+    const result = await setAdminSession(password);
+    if (!result.success) {
+      return NextResponse.json(
+        { success: false, error: result.error || "Invalid administrator credentials" },
+        { status: 401 }
+      );
     }
 
     return NextResponse.json({ success: true, message: "Authentication successful" });
