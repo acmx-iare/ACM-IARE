@@ -129,6 +129,12 @@ async function runComprehensiveTests() {
   const consumedToken = await sql`SELECT used_at FROM password_reset_tokens WHERE id = ${tokenId};`;
   assert(consumedToken[0].used_at !== null, "Token marked as used and cannot be reused");
 
+  // Restore configured admin password
+  const originalPass = process.env.ADMIN_PASSWORD || "acmiare2026admin";
+  const restoredSalt = await bcrypt.genSalt(12);
+  const restoredHash = await bcrypt.hash(originalPass, restoredSalt);
+  await sql`UPDATE admin_users SET password_hash = ${restoredHash} WHERE id = ${adminUser.id};`;
+
   // Re-verify token expiration logic: an expired token must fail
   const expiredRawToken = crypto.randomBytes(32).toString("hex");
   const expiredHash = crypto.createHash("sha256").update(expiredRawToken).digest("hex");
