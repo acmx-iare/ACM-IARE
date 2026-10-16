@@ -1,10 +1,20 @@
+"use client";
+
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import { ArrowUpRight, Mail, Phone, MapPin, Globe } from "lucide-react";
 import { CHAPTER_INFO, NAVIGATION_LINKS, TECHNICAL_SIGS } from "@/data/chapter";
 
 export function Footer() {
+  const pathname = usePathname();
+
+  // Do not render public footer on admin pages
+  if (pathname?.startsWith("/admin")) {
+    return null;
+  }
+
   const currentYear = 2026;
 
   return (

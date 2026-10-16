@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Search, Calendar, Filter, Sparkles } from "lucide-react";
 import { CHAPTER_EVENTS } from "@/data/chapter";
+import { ChapterEvent } from "@/types";
 import { EventCard } from "@/components/events/EventCard";
 import { Button } from "@/components/ui/Button";
 
@@ -11,9 +12,21 @@ type FilterTab = "All" | "Upcoming" | "Past" | "Hackathon" | "Workshop" | "Tech 
 export default function EventsPage() {
   const [selectedTab, setSelectedTab] = useState<FilterTab>("All");
   const [searchQuery, setSearchQuery] = useState("");
+  const [eventsList, setEventsList] = useState<ChapterEvent[]>(CHAPTER_EVENTS);
+
+  useEffect(() => {
+    fetch("/api/events")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && Array.isArray(data.events)) {
+          setEventsList(data.events);
+        }
+      })
+      .catch((err) => console.warn("Could not refresh events from API:", err));
+  }, []);
 
   const filteredEvents = useMemo(() => {
-    return CHAPTER_EVENTS.filter((event) => {
+    return eventsList.filter((event) => {
       // Tab filter
       if (selectedTab === "Upcoming" && event.status !== "upcoming") return false;
       if (selectedTab === "Past" && event.status !== "past") return false;
@@ -38,10 +51,10 @@ export default function EventsPage() {
 
       return true;
     });
-  }, [selectedTab, searchQuery]);
+  }, [eventsList, selectedTab, searchQuery]);
 
-  const upcomingCount = CHAPTER_EVENTS.filter((e) => e.status === "upcoming").length;
-  const pastCount = CHAPTER_EVENTS.filter((e) => e.status === "past").length;
+  const upcomingCount = eventsList.filter((e) => e.status === "upcoming").length;
+  const pastCount = eventsList.filter((e) => e.status === "past").length;
 
   const tabs: { label: string; value: FilterTab; badge?: number }[] = [
     { label: "All Events", value: "All", badge: CHAPTER_EVENTS.length },

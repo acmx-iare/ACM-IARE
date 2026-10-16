@@ -13,13 +13,14 @@ import {
   Award,
   Sparkles,
 } from "lucide-react";
-import { CHAPTER_EVENTS } from "@/data/chapter";
 import { formatDate } from "@/lib/utils";
 import { Badge } from "@/components/ui/Badge";
 import { EventRegistrationModal } from "@/components/events/EventRegistrationModal";
+import { getAllEvents, getEventBySlug } from "@/lib/events-store";
 
 export async function generateStaticParams() {
-  return CHAPTER_EVENTS.map((event) => ({
+  const events = await getAllEvents(false);
+  return events.map((event) => ({
     slug: event.slug,
   }));
 }
@@ -30,7 +31,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const event = CHAPTER_EVENTS.find((e) => e.slug === slug);
+  const event = await getEventBySlug(slug);
 
   if (!event) {
     return { title: "Event Not Found" };
@@ -47,13 +48,31 @@ export async function generateMetadata({
   };
 }
 
-export default async function EventDetailPage({
+export default function EventDetailPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  return (
+    <React.Suspense
+      fallback={
+        <div className="min-h-screen bg-slate-50 flex items-center justify-center p-8">
+          <div className="text-slate-500 text-sm">Loading event details...</div>
+        </div>
+      }
+    >
+      <EventDetailContent params={params} />
+    </React.Suspense>
+  );
+}
+
+async function EventDetailContent({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const event = CHAPTER_EVENTS.find((e) => e.slug === slug);
+  const event = await getEventBySlug(slug);
 
   if (!event) {
     notFound();

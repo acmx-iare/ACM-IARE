@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
@@ -42,8 +43,13 @@ export const metadata: Metadata = {
   creator: "ACM IARE Student Chapter",
   publisher: "Institute of Aeronautical Engineering",
   icons: {
-    icon: "/images/acm-iare-logo.jpg",
-    apple: "/images/acm-iare-logo.jpg",
+    icon: [
+      { url: "/icon.png", type: "image/png" },
+      { url: "/favicon.ico" },
+      { url: "/images/acm-iare-logo.jpg" },
+    ],
+    shortcut: "/favicon.ico",
+    apple: "/apple-icon.png",
   },
   openGraph: {
     type: "website",
@@ -76,11 +82,15 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased scroll-smooth`}
     >
       <body className="min-h-full flex flex-col bg-white text-[#14213d] font-sans selection:bg-blue-100 selection:text-blue-900">
-        <Navbar />
+        <Suspense fallback={<div className="h-16 bg-white border-b border-slate-100" />}>
+          <Navbar />
+        </Suspense>
         <main id="main-content" className="flex-1 focus:outline-none">
           {children}
         </main>
-        <Footer />
+        <Suspense fallback={null}>
+          <Footer />
+        </Suspense>
       </body>
     </html>
   );

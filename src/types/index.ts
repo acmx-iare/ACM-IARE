@@ -44,6 +44,76 @@ export interface ChapterEvent {
   bannerImage: string;
   capacity?: number;
   featured?: boolean;
+  // Google Form & Sheets Automation Metadata
+  googleFormId?: string;
+  googleFormUrl?: string;
+  googleFormEditUrl?: string; // Kept server-side / admin-only
+  formStatus?: "active" | "closed" | "failed" | "not_created";
+  formCreationError?: string;
+  responseCount?: number;
+  registrationQuestions?: FormQuestion[];
+  formConfig?: FormConfiguration;
+  isArchived?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export type QuestionType =
+  | "text"
+  | "paragraph"
+  | "multiple_choice"
+  | "checkboxes"
+  | "dropdown"
+  | "scale"
+  | "date"
+  | "time"
+  | "section";
+
+export interface FormQuestion {
+  id: string;
+  title: string;
+  type: QuestionType;
+  required: boolean;
+  helpText?: string;
+  options?: string[]; // For multiple_choice, checkboxes, dropdown
+  scaleMin?: number; // 0 or 1 for linear scale (default 1)
+  scaleMax?: number; // 3 to 10 for linear scale (default 5)
+  scaleMinLabel?: string; // Label for lower bound
+  scaleMaxLabel?: string; // Label for upper bound
+}
+
+export interface FormSettings {
+  collectEmail: boolean;
+  limitOneResponsePerUser: boolean;
+  allowResponseEdits: boolean;
+  confirmationMessage: string;
+  customClosedMessage?: string;
+  registrationDeadline?: string;
+}
+
+export interface FormConfiguration {
+  formTitle: string;
+  formDescription: string;
+  settings: FormSettings;
+  questions: FormQuestion[];
+  templateId?: string;
+  version?: number;
+  updatedAt?: string;
+}
+
+export interface EventRegistration {
+  id: string;
+  eventId: string;
+  eventTitle: string;
+  submittedAt: string;
+  fullName: string;
+  rollNumber: string;
+  email: string;
+  phone: string;
+  department: string;
+  yearOfStudy: string;
+  acmId?: string;
+  rawResponses?: Record<string, string>;
 }
 
 export type TeamCategory = "Faculty" | "Office Bearers" | "Technical Leads" | "Committee Leads";

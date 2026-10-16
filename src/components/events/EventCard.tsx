@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Calendar, Clock, MapPin, ArrowRight } from "lucide-react";
+import { Calendar, Clock, MapPin, ArrowRight, ExternalLink } from "lucide-react";
 import { ChapterEvent } from "@/types";
 import { Badge } from "@/components/ui/Badge";
 import { formatDate } from "@/lib/utils";
@@ -33,6 +33,11 @@ export function EventCard({ event, priority = false }: EventCardProps) {
           {isUpcoming && event.registrationOpen && (
             <Badge variant="teal">
               Registration Open
+            </Badge>
+          )}
+          {isUpcoming && !event.registrationOpen && (
+            <Badge variant="danger">
+              Registration Closed
             </Badge>
           )}
           {!isUpcoming && (
@@ -73,18 +78,33 @@ export function EventCard({ event, priority = false }: EventCardProps) {
 
         {/* Footer Row */}
         <div className="pt-5 mt-4 border-t border-slate-100 flex items-center justify-between gap-2">
-          <span className="text-xs text-slate-500 truncate inline-flex items-center gap-1 max-w-[65%]">
+          <span className="text-xs text-slate-500 truncate inline-flex items-center gap-1 max-w-[50%]">
             <MapPin className="w-3.5 h-3.5 text-slate-400 shrink-0" />
             <span className="truncate">{event.venue.split(",")[0]}</span>
           </span>
 
-          <Link
-            href={`/events/${event.slug}`}
-            className="inline-flex items-center text-xs font-bold text-blue-600 group-hover:text-blue-800 transition-colors"
-          >
-            Details
-            <ArrowRight className="ml-1 w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
-          </Link>
+          <div className="flex items-center gap-2">
+            {event.registrationOpen && (event.googleFormUrl || event.registrationUrl) && (
+              <a
+                href={event.googleFormUrl || event.registrationUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-700 hover:text-emerald-900 bg-emerald-50 hover:bg-emerald-100 px-2.5 py-1 rounded border border-emerald-200 transition-colors"
+                title="Register directly on Google Form"
+              >
+                <span>Register</span>
+                <ExternalLink className="w-3 h-3" />
+              </a>
+            )}
+
+            <Link
+              href={`/events/${event.slug}`}
+              className="inline-flex items-center text-xs font-bold text-blue-600 group-hover:text-blue-800 transition-colors"
+            >
+              Details
+              <ArrowRight className="ml-1 w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
+            </Link>
+          </div>
         </div>
       </div>
     </article>

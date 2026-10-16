@@ -33,6 +33,11 @@ export function Navbar() {
     };
   }, [mobileMenuOpen]);
 
+  // Do not render public Navbar or top affiliation bar on Admin portal pages
+  if (pathname?.startsWith("/admin")) {
+    return null;
+  }
+
   return (
     <>
       {/* Skip to Main Content Link for accessibility */}
