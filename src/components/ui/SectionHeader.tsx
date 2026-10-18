@@ -25,29 +25,29 @@ export function SectionHeader({
   return (
     <div
       className={cn(
-        "flex flex-col md:flex-row md:items-end justify-between gap-4 mb-10",
-        align === "center" && "md:flex-col items-center text-center",
+        "mb-8 flex min-w-0 flex-col justify-between gap-5 sm:mb-10 md:flex-row md:items-end md:gap-8",
+        align === "center" && "items-center text-center md:flex-col",
         className
       )}
     >
-      <div className={cn("max-w-2xl", align === "center" && "mx-auto")}>
+      <div className={cn("min-w-0 max-w-2xl", align === "center" && "mx-auto")}>
         {badge && (
-          <div className="inline-block text-xs font-bold uppercase tracking-wider text-blue-700 bg-blue-50 border border-blue-200/60 px-2.5 py-1 rounded-sm mb-3">
+          <div className="mb-3 inline-flex items-center border-l-2 border-blue-600 bg-blue-50/70 px-2.5 py-1 text-sm font-semibold text-blue-800">
             {badge}
           </div>
         )}
-        <h2 className="text-2xl sm:text-3xl font-extrabold text-[#14213d] tracking-tight">
+        <h2 className="section-heading font-bold text-[#14213d]">
           {title}
         </h2>
         {description && (
-          <p className="mt-2 text-base text-slate-600 leading-relaxed">
+          <p className="lead-copy mt-3 text-sm sm:text-base">
             {description}
           </p>
         )}
       </div>
 
       {actionHref && actionText && (
-        <div className="shrink-0">
+        <div className="shrink-0 md:pb-1">
           <Link
             href={actionHref}
             className="inline-flex items-center text-sm font-semibold text-blue-600 hover:text-blue-800 transition-colors group"

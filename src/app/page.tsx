@@ -66,23 +66,23 @@ async function HomePageContent() {
       )}
 
       {/* 1. Academic Hero Section */}
-      <section className="relative bg-gradient-to-b from-slate-50 via-white to-slate-50/50 border-b border-slate-200 py-16 sm:py-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            
-            {/* Left Content Column */}
-            <div className="lg:col-span-7 space-y-6">
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold bg-blue-50 text-blue-800 border border-blue-200/80">
+      <section className="relative overflow-hidden border-b border-slate-200 bg-[#f7f9fc] py-[clamp(3.5rem,8vw,7rem)]">
+        <div className="site-container">
+          <div className="grid min-w-0 grid-cols-1 items-center gap-10 lg:grid-cols-12 lg:gap-12">
+
+            {/* Chapter introduction */}
+            <div className="hero-enter min-w-0 space-y-6 lg:col-span-7">
+              <div className="inline-flex max-w-full items-center gap-2 rounded-md border border-blue-200/80 bg-white px-3 py-1.5 text-xs font-semibold text-blue-800">
                 <span className="w-2 h-2 rounded-full bg-blue-600"></span>
                 {hero.badge || "Official Chapter ID • Established 2018"}
               </div>
 
-              <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#14213d] tracking-tight leading-[1.15]">
+              <h1 className="display-heading font-extrabold text-[#14213d]">
                 {hero.titlePrefix || "Advancing Computing as a Science & Profession at"}{" "}
                 <span className="text-blue-600">{hero.highlightedWord || "IARE"}</span>
               </h1>
 
-              <p className="text-base sm:text-lg text-slate-600 leading-relaxed max-w-2xl font-normal">
+              <p className="lead-copy text-base sm:text-lg">
                 {hero.description ||
                   "The ACM Student Chapter at the Institute of Aeronautical Engineering unites passionate student developers, researchers, and faculty mentors. We foster computer science fundamentals, algorithmic problem solving, open source contributions, and ethical engineering."}
               </p>
@@ -117,11 +117,11 @@ async function HomePageContent() {
             </div>
 
             {/* Right Card / Visual Column */}
-            <div className="lg:col-span-5">
-              <div className="bg-white border border-slate-200 rounded-lg p-6 sm:p-8 shadow-sm relative overflow-hidden">
-                <div className="flex items-center justify-between pb-4 border-b border-slate-100">
-                  <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-md bg-white border border-slate-200 p-1 shrink-0">
+            <div className="min-w-0 lg:col-span-5">
+              <div className="relative overflow-hidden rounded-2xl border border-[#263854] bg-[#14213d] p-5 text-white shadow-[0_24px_60px_-36px_rgba(20,33,61,0.72)] sm:p-8">
+                <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/15 pb-5">
+                  <div className="flex min-w-0 items-center gap-3">
+                    <div className="h-12 w-12 shrink-0 rounded-lg border border-slate-200 bg-white p-1">
                       <Image
                         src="/images/acm-iare-logo.jpg"
                         alt="ACM IARE Logo"
@@ -130,44 +130,42 @@ async function HomePageContent() {
                         className="object-contain"
                       />
                     </div>
-                    <div>
-                      <h2 className="text-sm font-bold text-[#14213d]">IARE Chapter Chapter</h2>
-                      <p className="text-xs text-slate-500">Dundigal, Hyderabad</p>
+                    <div className="min-w-0">
+                      <h2 className="text-sm font-bold text-white">ACM IARE</h2>
+                      <p className="text-xs text-slate-300">Dundigal, Hyderabad</p>
                     </div>
                   </div>
-                  <span className="text-[11px] font-bold px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200">
-                    Active 2026
+                  <span className="rounded border border-emerald-300/30 bg-emerald-300/10 px-2.5 py-1 text-[11px] font-semibold text-emerald-200">
+                    Active chapter
                   </span>
                 </div>
 
-                <div className="mt-5 space-y-4">
-                  <div className="p-3 bg-slate-50 rounded border border-slate-100 text-xs space-y-1">
-                    <span className="font-semibold text-slate-700 block">Next Flagship Assembly:</span>
-                    <p className="text-slate-600 font-medium">IARE CodeSprint Hackathon</p>
-                    <span className="text-slate-500 block">November 14, 2026 • 08:30 AM IST</span>
+                <div className="mt-5 space-y-5">
+                  <div className="rounded-lg border border-white/10 bg-white/[0.06] p-4 text-sm">
+                    <span className="mb-1 block text-xs font-semibold text-blue-200">Next flagship event</span>
+                    <p className="font-semibold text-white">IARE CodeSprint Hackathon</p>
+                    <span className="mt-1 block text-xs text-slate-300">November 14, 2026 · 08:30 AM IST</span>
                   </div>
 
-                  <div className="space-y-2 text-xs text-slate-600">
-                    <div className="flex justify-between py-1 border-b border-slate-100">
-                      <span className="text-slate-500">Department Affiliation:</span>
-                      <span className="font-semibold text-slate-800">CSE &amp; IT</span>
+                  <div className="space-y-2 text-xs">
+                    <div className="flex flex-wrap justify-between gap-x-4 gap-y-1 border-b border-white/10 py-2">
+                      <span className="text-slate-300">Department affiliation</span>
+                      <span className="font-semibold text-white">CSE &amp; IT</span>
                     </div>
-                    <div className="flex justify-between py-1 border-b border-slate-100">
-                      <span className="text-slate-500">Technical SIGs:</span>
-                      <span className="font-semibold text-slate-800">4 Active Cohorts</span>
+                    <div className="flex flex-wrap justify-between gap-x-4 gap-y-1 border-b border-white/10 py-2">
+                      <span className="text-slate-300">Technical SIGs</span>
+                      <span className="font-semibold text-white">4 active cohorts</span>
                     </div>
-                    <div className="flex justify-between py-1">
-                      <span className="text-slate-500">Eligibility:</span>
-                      <span className="font-semibold text-slate-800">Enrolled IARE Students</span>
+                    <div className="flex flex-wrap justify-between gap-x-4 gap-y-1 py-2">
+                      <span className="text-slate-300">Eligibility</span>
+                      <span className="font-semibold text-white">Enrolled IARE students</span>
                     </div>
                   </div>
 
-                  <div className="pt-2">
-                    <Button href="/about" variant="ghost" size="sm" className="w-full text-blue-700 hover:text-blue-900 justify-between">
-                      <span>Read Chapter Charter &amp; Bylaws</span>
-                      <ArrowRight className="w-4 h-4" />
-                    </Button>
-                  </div>
+                  <Button href="/about" variant="ghost" size="sm" className="w-full justify-between text-blue-200 hover:bg-white/10 hover:text-white">
+                    <span>Read Chapter Charter &amp; Bylaws</span>
+                    <ArrowRight className="h-4 w-4" />
+                  </Button>
                 </div>
               </div>
             </div>
@@ -177,8 +175,8 @@ async function HomePageContent() {
       </section>
 
       {/* 2. Institutional Introduction & Technical Pillars */}
-      <section className="py-16 bg-white border-b border-slate-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="section-space bg-white border-b border-slate-200">
+        <div className="site-container">
           <SectionHeader
             badge="Chapter Mission"
             title="Building Foundational Competence, Not Just Buzzwords"
@@ -186,7 +184,7 @@ async function HomePageContent() {
           />
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="p-6 rounded-lg border border-slate-200 bg-slate-50/50 hover:bg-white hover:border-slate-300 transition-colors">
+            <div className="academic-card p-6">
               <div className="w-10 h-10 rounded-md bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-700 mb-4">
                 <Code2 className="w-5 h-5" />
               </div>
@@ -196,7 +194,7 @@ async function HomePageContent() {
               </p>
             </div>
 
-            <div className="p-6 rounded-lg border border-slate-200 bg-slate-50/50 hover:bg-white hover:border-slate-300 transition-colors">
+            <div className="academic-card p-6">
               <div className="w-10 h-10 rounded-md bg-teal-50 border border-teal-200 flex items-center justify-center text-teal-700 mb-4">
                 <Terminal className="w-5 h-5" />
               </div>
@@ -206,7 +204,7 @@ async function HomePageContent() {
               </p>
             </div>
 
-            <div className="p-6 rounded-lg border border-slate-200 bg-slate-50/50 hover:bg-white hover:border-slate-300 transition-colors">
+            <div className="academic-card p-6">
               <div className="w-10 h-10 rounded-md bg-indigo-50 border border-indigo-200 flex items-center justify-center text-indigo-700 mb-4">
                 <BookOpen className="w-5 h-5" />
               </div>
@@ -216,7 +214,7 @@ async function HomePageContent() {
               </p>
             </div>
 
-            <div className="p-6 rounded-lg border border-slate-200 bg-slate-50/50 hover:bg-white hover:border-slate-300 transition-colors">
+            <div className="academic-card p-6">
               <div className="w-10 h-10 rounded-md bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-700 mb-4">
                 <Users className="w-5 h-5" />
               </div>
@@ -230,8 +228,8 @@ async function HomePageContent() {
       </section>
 
       {/* 3. Featured Upcoming Events */}
-      <section className="py-16 bg-slate-50 border-b border-slate-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="section-space bg-slate-50 border-b border-slate-200">
+        <div className="site-container">
           <SectionHeader
             badge="Academic Calendar"
             title="Featured Upcoming Events"
@@ -249,8 +247,8 @@ async function HomePageContent() {
       </section>
 
       {/* 4. Special Interest Groups (SIGs) */}
-      <section className="py-16 bg-white border-b border-slate-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="section-space bg-white border-b border-slate-200">
+        <div className="site-container">
           <SectionHeader
             badge="Special Interest Groups"
             title="Specialized Technical Focus Areas"
@@ -323,8 +321,8 @@ async function HomePageContent() {
       </section>
 
       {/* 5. Selected Chapter Leadership */}
-      <section className="py-16 bg-slate-50 border-b border-slate-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="section-space bg-slate-50 border-b border-slate-200">
+        <div className="site-container">
           <SectionHeader
             badge="Leadership"
             title="Faculty Advisory &amp; Student Executive"
@@ -342,8 +340,8 @@ async function HomePageContent() {
       </section>
 
       {/* 6. Verified Chapter Achievements */}
-      <section className="py-16 bg-white border-b border-slate-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="section-space bg-white border-b border-slate-200">
+        <div className="site-container">
           <SectionHeader
             badge="Verified Records"
             title="Recognitions &amp; Competitive Milestones"
@@ -354,7 +352,7 @@ async function HomePageContent() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {CHAPTER_ACHIEVEMENTS.map((item, idx) => (
-              <div key={idx} className="p-6 rounded-lg border border-slate-200 bg-slate-50/40 space-y-3">
+              <div key={idx} className="academic-card p-6 space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded border border-blue-200">
                     {item.year}
@@ -374,7 +372,7 @@ async function HomePageContent() {
       </section>
 
       {/* 7. Call To Action (Join / Inquire) */}
-      <section className="py-16 sm:py-20 bg-[#14213d] text-white">
+      <section className="bg-[#14213d] py-[clamp(3.5rem,7vw,6rem)] text-white">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
           <span className="inline-block text-xs font-bold uppercase tracking-widest text-blue-400 bg-blue-950/70 border border-blue-800 px-3 py-1 rounded-sm">
             Become Part of ACM IARE

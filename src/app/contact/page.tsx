@@ -156,17 +156,17 @@ export default function ContactPage() {
   return (
     <div className="flex flex-col min-h-screen bg-slate-50">
       {/* Header Banner */}
-      <section className="bg-white border-b border-slate-200 py-12 sm:py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-3xl space-y-3">
+      <section className="bg-white border-b border-slate-200 section-space">
+        <div className="site-container">
+          <div className="hero-enter max-w-3xl space-y-3">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-800 border border-blue-200">
               <Mail className="w-3.5 h-3.5 text-blue-600" />
               Chapter Engagement Desk
             </div>
-            <h1 className="text-3xl sm:text-4xl font-extrabold text-[#14213d] tracking-tight">
+            <h1 className="display-heading font-extrabold text-[#14213d]">
               Contact Us &amp; Join the Chapter
             </h1>
-            <p className="text-base text-slate-600 leading-relaxed">
+            <p className="lead-copy text-base">
               Submit your application to become an active student member of the ACM IARE Chapter, or get in touch with our faculty advisory and student executive desk.
             </p>
           </div>
@@ -174,7 +174,7 @@ export default function ContactPage() {
       </section>
 
       {/* Main Content Area */}
-      <div className="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex-1">
+      <div className="py-12 site-container w-full flex-1">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
           
           {/* Left Column: Forms (7 cols) */}
@@ -187,7 +187,7 @@ export default function ContactPage() {
                   role="tab"
                   aria-selected={activeTab === "join"}
                   onClick={() => setActiveTab("join")}
-                  className={`flex-1 py-3.5 px-4 text-xs sm:text-sm font-bold text-center border-b-2 transition-colors flex items-center justify-center gap-2 ${
+                  className={`flex min-h-14 flex-1 items-center justify-center gap-2 border-b-2 px-2 py-3.5 text-center text-xs font-bold transition-colors motion-reduce:transition-none sm:px-4 sm:text-sm ${
                     activeTab === "join"
                       ? "border-blue-600 text-blue-700 bg-white"
                       : "border-transparent text-slate-600 hover:text-slate-900"
@@ -200,7 +200,7 @@ export default function ContactPage() {
                   role="tab"
                   aria-selected={activeTab === "contact"}
                   onClick={() => setActiveTab("contact")}
-                  className={`flex-1 py-3.5 px-4 text-xs sm:text-sm font-bold text-center border-b-2 transition-colors flex items-center justify-center gap-2 ${
+                  className={`flex min-h-14 flex-1 items-center justify-center gap-2 border-b-2 px-2 py-3.5 text-center text-xs font-bold transition-colors motion-reduce:transition-none sm:px-4 sm:text-sm ${
                     activeTab === "contact"
                       ? "border-blue-600 text-blue-700 bg-white"
                       : "border-transparent text-slate-600 hover:text-slate-900"

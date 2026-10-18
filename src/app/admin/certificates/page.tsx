@@ -92,13 +92,28 @@ export default function AdminCertificatesPage() {
     let isMounted = true;
 
     Promise.all([
-      fetch("/api/admin/certificates").then((r) => r.json()),
-      fetch("/api/admin/certificates/templates").then((r) => r.json()),
-      fetch("/api/admin/events").then((r) => r.json()),
-      fetch("/api/admin/registrations").then((r) => r.json()),
+      fetch("/api/admin/certificates"),
+      fetch("/api/admin/certificates/templates"),
+      fetch("/api/admin/events"),
+      fetch("/api/admin/registrations"),
     ])
-      .then(([certData, tmplData, eventData, regData]) => {
+      .then(async ([certRes, tmplRes, eventRes, regRes]) => {
         if (!isMounted) return;
+        if (
+          certRes.status === 401 ||
+          tmplRes.status === 401 ||
+          eventRes.status === 401 ||
+          regRes.status === 401
+        ) {
+          window.location.href = "/admin/login";
+          return;
+        }
+
+        const certData = await certRes.json();
+        const tmplData = await tmplRes.json();
+        const eventData = await eventRes.json();
+        const regData = await regRes.json();
+
         if (certData.success) {
           setCertificates(certData.certificates || []);
           setStats(certData.stats || { total: 0, active: 0, revoked: 0 });

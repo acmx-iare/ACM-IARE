@@ -1,16 +1,13 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { redirect } from "next/navigation";
 import {
   FileText,
   Image as ImageIcon,
   Calendar,
   ExternalLink,
-  Shield,
   Layers,
 } from "lucide-react";
-import { isAuthenticatedAdmin } from "@/lib/admin-auth";
 import { AdminLogoutButton } from "@/components/admin/AdminLogoutButton";
 
 export const metadata = {
@@ -24,15 +21,16 @@ export default function StudioLayout({
   children: React.ReactNode;
 }) {
 
+
   return (
     <div className="min-h-screen flex flex-col bg-slate-100 text-slate-800">
       {/* Top Studio CMS Header */}
       <header className="bg-[#14213d] text-white border-b border-slate-800 sticky top-0 z-40">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            
+        <div className="site-container">
+          <div className="flex h-16 min-w-0 items-center justify-between gap-3">
+
             {/* Left: Branding */}
-            <div className="flex items-center gap-3">
+            <div className="flex min-w-0 items-center gap-2.5 sm:gap-3">
               <div className="w-8 h-8 rounded bg-white p-0.5 overflow-hidden shrink-0">
                 <Image
                   src="/images/acm-iare-logo.jpg"
@@ -42,12 +40,12 @@ export default function StudioLayout({
                   className="object-contain"
                 />
               </div>
-              <div className="flex items-center gap-2">
-                <span className="font-extrabold text-sm sm:text-base tracking-tight">
+              <div className="flex min-w-0 items-center gap-2">
+                <span className="shrink-0 text-sm font-extrabold tracking-tight sm:text-base">
                   ACM IARE
                 </span>
-                <span className="px-2 py-0.5 text-[11px] font-bold rounded bg-purple-600/70 border border-purple-400/40 text-purple-100 flex items-center gap-1">
-                  <Layers className="w-3 h-3" />
+                <span className="hidden items-center gap-1 rounded border border-purple-400/40 bg-purple-600/70 px-2 py-0.5 text-[11px] font-bold text-purple-100 sm:flex">
+                  <Layers className="h-3 w-3" />
                   Website Studio CMS
                 </span>
               </div>
@@ -79,7 +77,7 @@ export default function StudioLayout({
                 title="Switch to Event Admin Console"
               >
                 <Calendar className="w-3 h-3" />
-                <span>Events Admin &rarr;</span>
+                <span className="hidden sm:inline">Events Admin &rarr;</span>
               </Link>
 
               <Link
@@ -99,7 +97,7 @@ export default function StudioLayout({
       </header>
 
       {/* Main Studio Content */}
-      <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8">
+      <main className="site-container flex-1 py-5 sm:py-6 lg:py-8">
         {children}
       </main>
 

@@ -42,17 +42,17 @@ async function TeamPageContent() {
   return (
     <div className="flex flex-col min-h-screen bg-slate-50">
       {/* Header Banner */}
-      <section className="bg-white border-b border-slate-200 py-12 sm:py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-3xl space-y-3">
+      <section className="bg-white border-b border-slate-200 section-space">
+        <div className="site-container">
+          <div className="hero-enter max-w-3xl space-y-3">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-800 border border-blue-200">
               <Users className="w-3.5 h-3.5 text-blue-600" />
               {hero.badge || "Leadership & Advisory Council"}
             </div>
-            <h1 className="text-3xl sm:text-4xl font-extrabold text-[#14213d] tracking-tight">
+            <h1 className="display-heading font-extrabold text-[#14213d]">
               {hero.title || "Chapter Team & Office Bearers"}
             </h1>
-            <p className="text-base text-slate-600 leading-relaxed">
+            <p className="lead-copy text-base">
               {hero.description ||
                 "The ACM Student Chapter at IARE is guided by dedicated faculty scholars and operated by democratically elected student officers committed to technical service and academic integrity."}
             </p>
@@ -61,7 +61,7 @@ async function TeamPageContent() {
       </section>
 
       {/* Main Content Sections */}
-      <div className="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex-1 space-y-16">
+      <div className="py-12 site-container w-full flex-1 space-y-16">
         
         {/* 1. Faculty Advisors & Institutional Patrons */}
         <section>

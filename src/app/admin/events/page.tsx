@@ -37,6 +37,10 @@ export default function AdminEventsPage() {
   const fetchEvents = async () => {
     try {
       const res = await fetch("/api/admin/events");
+      if (res.status === 401) {
+        window.location.href = "/admin/login";
+        return;
+      }
       const data = await res.json();
       if (data.success && Array.isArray(data.events)) {
         setEvents(data.events);
@@ -50,9 +54,15 @@ export default function AdminEventsPage() {
 
   useEffect(() => {
     fetch("/api/admin/events")
-      .then((res) => res.json())
+      .then((res) => {
+        if (res.status === 401) {
+          window.location.href = "/admin/login";
+          return null;
+        }
+        return res.json();
+      })
       .then((data) => {
-        if (data.success && Array.isArray(data.events)) {
+        if (data && data.success && Array.isArray(data.events)) {
           setEvents(data.events);
         }
       })

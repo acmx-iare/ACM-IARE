@@ -18,6 +18,17 @@ import { createDefaultFormConfig } from "@/data/form-templates";
 export default function NewEventPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  React.useEffect(() => {
+    fetch("/api/admin/auth")
+      .then((r) => r.json())
+      .then((data) => {
+        if (!data.authenticated) {
+          window.location.href = "/admin/login";
+        }
+      });
+  }, []);
+
   const [createdResult, setCreatedResult] = useState<{
     title: string;
     formUrl?: string;

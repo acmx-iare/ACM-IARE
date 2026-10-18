@@ -20,6 +20,9 @@ import { getAllEvents, getEventBySlug } from "@/lib/events-store";
 
 export async function generateStaticParams() {
   const events = await getAllEvents(false);
+  if (!events || events.length === 0) {
+    return [{ slug: "git-and-open-source-bootcamp-2026" }];
+  }
   return events.map((event) => ({
     slug: event.slug,
   }));
@@ -84,8 +87,8 @@ async function EventDetailContent({
     <div className="flex flex-col min-h-screen bg-slate-50">
       {/* Breadcrumb Header */}
       <div className="bg-white border-b border-slate-200 py-4">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <nav className="flex items-center gap-2 text-xs text-slate-500" aria-label="Breadcrumb">
+        <div className="site-container max-w-5xl">
+          <nav className="flex min-w-0 items-center gap-2 text-xs text-slate-500" aria-label="Breadcrumb">
             <Link href="/" className="hover:text-blue-600 transition-colors">
               Home
             </Link>
@@ -102,7 +105,7 @@ async function EventDetailContent({
       </div>
 
       {/* Main Event Article Container */}
-      <article className="py-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex-1 space-y-8">
+      <article className="site-container max-w-5xl w-full flex-1 space-y-8 py-8 sm:py-10">
         
         {/* Back Link */}
         <div>
@@ -148,7 +151,7 @@ async function EventDetailContent({
             </div>
 
             <div>
-              <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#14213d] tracking-tight">
+              <h1 className="section-heading max-w-3xl font-extrabold text-[#14213d] sm:text-4xl">
                 {event.title}
               </h1>
               <p className="mt-2 text-base text-slate-600 leading-relaxed font-normal">

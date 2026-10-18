@@ -57,6 +57,10 @@ function EditEventContent({
     async function loadEvent() {
       try {
         const res = await fetch(`/api/admin/events/${id}`);
+        if (res.status === 401) {
+          window.location.href = "/admin/login";
+          return;
+        }
         const data = await res.json();
         if (data.success && data.event) {
           setEventData(data.event);
