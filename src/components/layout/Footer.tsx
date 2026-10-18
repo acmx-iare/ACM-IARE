@@ -15,7 +15,7 @@ export function Footer() {
     return null;
   }
 
-  const currentYear = 2026;
+  const currentYear = new Date().getFullYear();
 
   return (
     <footer className="bg-[#0b1324] text-slate-300 border-t border-slate-800" aria-labelledby="footer-heading">
@@ -24,11 +24,11 @@ export function Footer() {
       </h2>
 
       {/* Main Footer Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
-          
-          {/* Col 1 & 2: Chapter Identity and Disclaimer */}
-          <div className="lg:col-span-2 space-y-4">
+      <div className="site-container py-14 sm:py-16">
+        <div className="grid grid-cols-1 gap-x-8 gap-y-12 sm:grid-cols-2 xl:grid-cols-5">
+
+          {/* Chapter identity and institutional notice */}
+          <div className="min-w-0 space-y-4 sm:col-span-2 xl:col-span-2">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-md bg-white p-0.5 shrink-0 overflow-hidden">
                 <Image
@@ -62,7 +62,7 @@ export function Footer() {
 
           {/* Col 3: Navigation Links */}
           <div className="space-y-3">
-            <h3 className="text-xs font-bold text-white uppercase tracking-wider">
+            <h3 className="text-sm font-semibold text-white">
               Quick Links
             </h3>
             <ul className="space-y-2 text-sm">
@@ -97,7 +97,7 @@ export function Footer() {
 
           {/* Col 4: Technical SIGs */}
           <div className="space-y-3">
-            <h3 className="text-xs font-bold text-white uppercase tracking-wider">
+            <h3 className="text-sm font-semibold text-white">
               Technical SIGs
             </h3>
             <ul className="space-y-2 text-sm">
@@ -117,7 +117,7 @@ export function Footer() {
 
           {/* Col 5: Institutional Contact */}
           <div className="space-y-3">
-            <h3 className="text-xs font-bold text-white uppercase tracking-wider">
+            <h3 className="text-sm font-semibold text-white">
               Campus Office
             </h3>
             <ul className="space-y-2.5 text-xs text-slate-400">

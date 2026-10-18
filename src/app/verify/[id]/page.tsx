@@ -96,7 +96,7 @@ function CertificateVerificationContent() {
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col selection:bg-cyan-500/30 selection:text-cyan-200">
       {/* Top Banner */}
       <header className="border-b border-slate-800 bg-slate-900/60 backdrop-blur-md sticky top-0 z-30">
-        <div className="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
+        <div className="site-container max-w-5xl flex h-16 items-center justify-between gap-3">
           <Link href="/" className="flex items-center gap-3 group">
             <div className="w-9 h-9 rounded bg-white p-0.5 overflow-hidden flex items-center justify-center transition-transform group-hover:scale-105">
               <Image
@@ -119,16 +119,17 @@ function CertificateVerificationContent() {
 
           <Link
             href="/"
-            className="text-xs text-slate-400 hover:text-white transition-colors flex items-center gap-1.5"
+            aria-label="Visit Chapter Portal"
+            className="inline-flex shrink-0 items-center gap-1.5 text-xs text-slate-400 transition-colors hover:text-white"
           >
-            <span>Visit Chapter Portal</span>
+            <span className="hidden sm:inline">Visit Chapter Portal</span>
             <ExternalLink className="w-3.5 h-3.5" />
           </Link>
         </div>
       </header>
 
       {/* Main Verification Card */}
-      <main className="flex-1 max-w-4xl w-full mx-auto px-4 py-8 sm:py-12 flex flex-col justify-center">
+      <main className="site-container max-w-4xl flex flex-1 flex-col justify-center py-8 sm:py-12">
         {loading ? (
           <div className="bg-slate-900/70 border border-slate-800 rounded-2xl p-12 text-center shadow-2xl backdrop-blur-md">
             <div className="w-14 h-14 border-4 border-cyan-500/20 border-t-cyan-500 rounded-full animate-spin mx-auto mb-4" />
@@ -157,8 +158,8 @@ function CertificateVerificationContent() {
             </p>
 
             {/* Quick Search */}
-            <form onSubmit={handleManualSearch} className="max-w-md mx-auto flex gap-2">
-              <div className="relative flex-1">
+            <form onSubmit={handleManualSearch} className="mx-auto flex w-full max-w-md gap-2">
+              <div className="relative min-w-0 flex-1">
                 <input
                   type="text"
                   placeholder="Enter Certificate ID (e.g. ACM-IARE-2026-XXXX)"

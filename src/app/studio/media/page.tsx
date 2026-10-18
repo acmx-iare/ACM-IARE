@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import {
   Image as ImageIcon,
@@ -10,12 +9,9 @@ import {
   Copy,
   Check,
   Search,
-  Filter,
   FileText,
   AlertCircle,
   Loader2,
-  ExternalLink,
-  Shield,
   RefreshCw,
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
@@ -52,7 +48,6 @@ export default function StudioMediaPage() {
 
   const fetchMedia = async () => {
     try {
-      setLoading(true);
       const res = await fetch("/api/studio/media");
       const data = await res.json();
       if (data.success) {
@@ -66,7 +61,21 @@ export default function StudioMediaPage() {
   };
 
   useEffect(() => {
-    fetchMedia();
+    let active = true;
+
+    fetch("/api/studio/media")
+      .then((res) => res.json())
+      .then((data) => {
+        if (active && data.success) setMediaList(data.media || []);
+      })
+      .catch(() => console.warn("Failed to load media list"))
+      .finally(() => {
+        if (active) setLoading(false);
+      });
+
+    return () => {
+      active = false;
+    };
   }, []);
 
   const handleUpload = async (e: React.FormEvent) => {
@@ -170,7 +179,7 @@ export default function StudioMediaPage() {
       </div>
 
       {/* Upload Box */}
-      <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-xs space-y-4">
+      <div className="space-y-4 rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6">
         <h2 className="text-sm font-bold text-slate-900 flex items-center gap-2">
           <Upload className="w-4 h-4 text-purple-600" />
           Upload New Asset
@@ -254,7 +263,7 @@ export default function StudioMediaPage() {
       </div>
 
       {/* Asset Explorer & Filters */}
-      <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-xs space-y-4">
+      <div className="space-y-4 rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:p-6">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-3 border-b border-slate-100">
           <div className="flex items-center gap-2">
             <h2 className="text-sm font-bold text-slate-900">Stored Assets ({filteredMedia.length})</h2>
@@ -268,22 +277,22 @@ export default function StudioMediaPage() {
             </button>
           </div>
 
-          <div className="flex items-center gap-2">
-            <div className="relative">
+          <div className="flex w-full min-w-0 flex-col gap-2 sm:w-auto sm:flex-row">
+            <div className="relative w-full sm:w-56">
               <input
                 type="text"
                 placeholder="Search file name..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="pl-8 pr-3 py-1.5 text-xs border border-slate-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-600 w-44 sm:w-56"
+                className="w-full rounded-md border border-slate-300 py-2 pl-8 pr-3 text-xs focus:outline-none focus:ring-2 focus:ring-purple-600"
               />
-              <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-2.5" />
+              <Search className="absolute left-2.5 top-2.5 h-3.5 w-3.5 text-slate-400" />
             </div>
 
             <select
               value={categoryFilter}
               onChange={(e) => setCategoryFilter(e.target.value)}
-              className="px-2.5 py-1.5 text-xs border border-slate-300 rounded-md bg-white text-slate-700"
+              className="w-full rounded-md border border-slate-300 bg-white px-2.5 py-2 text-xs text-slate-700 sm:w-auto"
             >
               <option value="all">All Categories</option>
               <option value="general">General</option>

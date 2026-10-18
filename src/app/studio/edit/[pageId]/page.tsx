@@ -358,8 +358,8 @@ function StudioEditContent() {
   return (
     <div className="space-y-6">
       {/* Top Header & Actions Bar */}
-      <div className="bg-white border border-slate-200 rounded-xl p-4 sm:p-6 shadow-xs flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 sticky top-16 z-30">
-        <div className="flex items-center gap-3">
+      <div className="sticky top-16 z-30 flex flex-col gap-4 rounded-xl border border-slate-200 bg-white p-3 shadow-sm sm:flex-row sm:items-center sm:justify-between sm:p-5">
+        <div className="flex min-w-0 items-start gap-3 sm:items-center">
           <Link
             href="/studio"
             className="p-2 rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-600 transition-colors"
@@ -367,9 +367,9 @@ function StudioEditContent() {
           >
             <ArrowLeft className="w-4 h-4" />
           </Link>
-          <div>
-            <div className="flex items-center gap-2">
-              <h1 className="text-lg sm:text-xl font-bold text-slate-900">{page.title}</h1>
+          <div className="min-w-0 flex-1">
+            <div className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1">
+              <h1 className="min-w-0 break-words text-base font-bold text-slate-900 sm:text-xl">{page.title}</h1>
               <span
                 className={`px-2 py-0.5 rounded text-[10px] font-bold ${
                   page.status === "modified"

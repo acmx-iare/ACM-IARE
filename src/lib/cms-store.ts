@@ -510,12 +510,14 @@ export async function revertCmsPageRevision(
 /**
  * Fetch all revision history for a CMS page
  */
-export async function getCmsPageRevisions(pageId: string): Promise<CmsRevision[]> {
+export async function getCmsPageRevisions(pageIdOrSlug: string): Promise<CmsRevision[]> {
   try {
+    const page = await getCmsPage(pageIdOrSlug);
+    const targetId = page ? page.id : pageIdOrSlug;
     const rows = await sql`
       SELECT id, page_id, version, data, status, change_summary, created_by, created_at
       FROM cms_revisions
-      WHERE page_id = ${pageId}
+      WHERE page_id = ${targetId} OR page_id = ${pageIdOrSlug}
       ORDER BY version DESC;
     `;
     return (rows as CmsRevision[]) || [];

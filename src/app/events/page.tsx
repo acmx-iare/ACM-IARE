@@ -69,17 +69,17 @@ export default function EventsPage() {
   return (
     <div className="flex flex-col min-h-screen bg-slate-50">
       {/* Header Banner */}
-      <section className="bg-white border-b border-slate-200 py-12 sm:py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-3xl space-y-3">
+      <section className="bg-white border-b border-slate-200 section-space">
+        <div className="site-container">
+          <div className="hero-enter max-w-3xl space-y-3">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-800 border border-blue-200">
               <Calendar className="w-3.5 h-3.5 text-blue-600" />
               Chapter Calendar &amp; Workshops
             </div>
-            <h1 className="text-3xl sm:text-4xl font-extrabold text-[#14213d] tracking-tight">
+            <h1 className="display-heading font-extrabold text-[#14213d]">
               Technical Events &amp; Hackathons
             </h1>
-            <p className="text-base text-slate-600 leading-relaxed">
+            <p className="lead-copy text-base">
               Explore upcoming workshops, algorithmic coding drills, research talks, and browse archive documentation of past chapter clinics.
             </p>
           </div>
@@ -96,7 +96,7 @@ export default function EventsPage() {
                     role="tab"
                     aria-selected={isSelected}
                     onClick={() => setSelectedTab(tab.value)}
-                    className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 ${
+                    className={`inline-flex min-h-10 items-center gap-1.5 rounded-md px-3 py-2 text-xs font-semibold transition-colors motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 ${
                       isSelected
                         ? "bg-[#14213d] text-white shadow-xs"
                         : "bg-slate-100 text-slate-700 hover:bg-slate-200"
@@ -127,7 +127,7 @@ export default function EventsPage() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search event title, venue..."
-                className="w-full pl-9 pr-3.5 py-2 text-xs sm:text-sm bg-white border border-slate-300 rounded-md placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-blue-600"
+                className="min-h-10 w-full rounded-md border border-slate-300 bg-white py-2 pl-9 pr-3.5 text-xs placeholder-slate-400 focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600 sm:text-sm"
                 aria-label="Search events"
               />
               {searchQuery && (
@@ -145,7 +145,7 @@ export default function EventsPage() {
       </section>
 
       {/* Events Grid Content */}
-      <section className="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex-1">
+      <section className="py-12 site-container w-full flex-1">
         {filteredEvents.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredEvents.map((event) => (
@@ -179,7 +179,7 @@ export default function EventsPage() {
 
       {/* Registration & Proposing an Event Callout */}
       <section className="bg-white border-t border-slate-200 py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="site-container">
           <div className="p-8 rounded-lg bg-blue-50/60 border border-blue-200/80 flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="space-y-2 max-w-2xl">
               <div className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-800">

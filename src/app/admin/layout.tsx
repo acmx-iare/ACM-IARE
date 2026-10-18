@@ -12,7 +12,7 @@ export default function AdminLayout({
       <Suspense fallback={null}>
         <AdminHeader />
       </Suspense>
-      <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8">
+      <main className="site-container flex-1 py-5 sm:py-6 lg:py-8">
         {children}
       </main>
       <Suspense fallback={null}>

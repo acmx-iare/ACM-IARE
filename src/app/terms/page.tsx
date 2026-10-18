@@ -11,7 +11,7 @@ export default function TermsPage() {
   return (
     <div className="flex flex-col min-h-screen bg-slate-50">
       <div className="bg-white border-b border-slate-200 py-12">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="site-container max-w-4xl">
           <Link
             href="/"
             className="inline-flex items-center text-xs font-semibold text-slate-500 hover:text-blue-700 transition-colors mb-4 gap-1.5"
@@ -22,7 +22,7 @@ export default function TermsPage() {
             <Scale className="w-3.5 h-3.5 text-blue-600" />
             Bylaws &amp; Standards
           </div>
-          <h1 className="text-3xl font-extrabold text-[#14213d] tracking-tight">
+          <h1 className="display-heading font-extrabold text-[#14213d]">
             Terms of Participation &amp; Code of Conduct
           </h1>
           <p className="text-sm text-slate-600 mt-2">
@@ -31,7 +31,7 @@ export default function TermsPage() {
         </div>
       </div>
 
-      <div className="py-12 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex-1">
+      <div className="py-12 site-container max-w-4xl w-full flex-1">
         <div className="academic-card p-6 sm:p-10 bg-white space-y-8 text-sm text-slate-700 leading-relaxed">
           
           <section className="space-y-3">

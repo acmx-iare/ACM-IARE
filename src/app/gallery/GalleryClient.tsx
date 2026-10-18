@@ -1,17 +1,40 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
-import Image from "next/image";
+import React, { useEffect, useMemo, useState } from "react";
 import { Award, Camera, Calendar, X, Star } from "lucide-react";
 import { GalleryItem } from "@/types";
 import { Badge } from "@/components/ui/Badge";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { Button } from "@/components/ui/Button";
 
+type GalleryEntry = Partial<GalleryItem> & {
+  year?: string;
+  altText?: string;
+  isFeatured?: boolean;
+};
+
+type GalleryDisplayItem = {
+  id: string;
+  title: string;
+  date: string;
+  category: string;
+  imageUrl: string;
+  caption: string;
+  altText: string;
+  isFeatured: boolean;
+};
+
+type AchievementEntry = {
+  year?: string;
+  title: string;
+  description: string;
+  category?: string;
+};
+
 interface GalleryClientProps {
-  initialItems: any[];
-  achievements?: any[];
-  hero?: any;
+  initialItems: GalleryEntry[];
+  achievements?: AchievementEntry[];
+  hero?: { badge?: string; title?: string; description?: string };
   layout?: {
     columns?: number;
     gap?: "compact" | "normal" | "spacious";
@@ -25,13 +48,24 @@ export function GalleryClient({
   hero = {},
   layout = {},
 }: GalleryClientProps) {
-  const [selectedCategory, setSelectedCategory] = useState<string>("All");
-  const [activeItem, setActiveItem] = useState<any | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState("All");
+  const [activeItem, setActiveItem] = useState<GalleryDisplayItem | null>(null);
+
+  useEffect(() => {
+    if (!activeItem) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setActiveItem(null);
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [activeItem]);
 
   // Normalize items
-  const items: any[] = useMemo(() => {
-    return (initialItems || []).map((item) => ({
-      id: item.id || `gal-${Math.random()}`,
+  const items = useMemo<GalleryDisplayItem[]>(() => {
+    return initialItems.map((item, index) => ({
+      id: item.id || `gallery-${index}`,
       title: item.title || "Gallery Photographic Entry",
       date: item.date || item.year || "2026",
       category: item.category || "Hackathons",
@@ -82,14 +116,14 @@ export function GalleryClient({
   return (
     <div className="flex flex-col min-h-screen bg-slate-50">
       {/* Header Banner */}
-      <section className="bg-white border-b border-slate-200 py-12 sm:py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-3xl space-y-3">
+      <section className="section-space border-b border-slate-200 bg-white">
+        <div className="site-container">
+          <div className="hero-enter max-w-3xl space-y-3">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-800 border border-blue-200">
               <Camera className="w-3.5 h-3.5 text-blue-600" />
               {hero.badge || "Archives & Competitive Milestones"}
             </div>
-            <h1 className="text-3xl sm:text-4xl font-extrabold text-[#14213d] tracking-tight">
+            <h1 className="display-heading font-extrabold text-[#14213d]">
               {hero.title || "Gallery & Verified Achievements"}
             </h1>
             <p className="text-base text-slate-600 leading-relaxed">
@@ -101,7 +135,7 @@ export function GalleryClient({
       </section>
 
       {/* Main Content Area */}
-      <div className="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full flex-1 space-y-16">
+      <div className="site-container w-full flex-1 space-y-16 py-12 sm:py-16">
         {/* Verified Achievements Grid */}
         {achievements.length > 0 && (
           <section>
@@ -112,7 +146,7 @@ export function GalleryClient({
             />
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {achievements.map((achievement: any, idx: number) => (
+              {achievements.map((achievement, idx) => (
                 <div
                   key={idx}
                   className="academic-card p-6 bg-white space-y-3 flex flex-col justify-between"
@@ -157,10 +191,11 @@ export function GalleryClient({
               {categories.map((cat) => (
                 <button
                   key={cat}
+                  type="button"
                   role="tab"
                   aria-selected={selectedCategory === cat}
                   onClick={() => setSelectedCategory(cat)}
-                  className={`px-3 py-1.5 rounded-md text-xs font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 ${
+                  className={`min-h-10 px-3 py-2 rounded-md text-xs font-semibold transition-colors motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 ${
                     selectedCategory === cat
                       ? "bg-[#14213d] text-white shadow-xs"
                       : "bg-white border border-slate-200 text-slate-700 hover:bg-slate-100"
@@ -175,10 +210,12 @@ export function GalleryClient({
           {/* Grid */}
           <div className={`grid ${colsClass} ${gapClass}`}>
             {filteredItems.map((item) => (
-              <div
+              <button
                 key={item.id}
+                type="button"
                 onClick={() => setActiveItem(item)}
-                className="academic-card overflow-hidden bg-white cursor-pointer group flex flex-col justify-between"
+                aria-label={`View gallery photo: ${item.title}`}
+                className="academic-card group flex w-full cursor-pointer flex-col justify-between overflow-hidden bg-white text-left"
               >
                 <div className={`relative ${aspectClass} w-full bg-slate-900 overflow-hidden`}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -212,7 +249,7 @@ export function GalleryClient({
                     {item.caption}
                   </p>
                 </div>
-              </div>
+              </button>
             ))}
           </div>
         </section>
@@ -224,10 +261,11 @@ export function GalleryClient({
           className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/80 backdrop-blur-xs"
           role="dialog"
           aria-modal="true"
+          aria-labelledby="gallery-image-title"
           onClick={() => setActiveItem(null)}
         >
           <div
-            className="bg-white rounded-lg border border-slate-200 max-w-2xl w-full overflow-hidden shadow-2xl animate-in fade-in zoom-in-95 duration-150"
+            className="max-h-[calc(100dvh-2rem)] w-full max-w-2xl overflow-y-auto rounded-xl border border-slate-200 bg-white shadow-2xl animate-in fade-in zoom-in-95 duration-150 motion-reduce:animate-none"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="relative aspect-[16/10] w-full bg-slate-950 flex items-center justify-center">
@@ -251,7 +289,7 @@ export function GalleryClient({
                 <Badge variant="upcoming">{activeItem.category}</Badge>
                 <span className="text-xs text-slate-500 font-medium">{activeItem.date}</span>
               </div>
-              <h3 className="text-lg font-bold text-[#14213d]">{activeItem.title}</h3>
+              <h3 id="gallery-image-title" className="text-lg font-bold text-[#14213d]">{activeItem.title}</h3>
               <p className="text-sm text-slate-600 leading-relaxed">{activeItem.caption}</p>
               <div className="pt-2 flex justify-end">
                 <Button variant="outline" size="sm" onClick={() => setActiveItem(null)}>

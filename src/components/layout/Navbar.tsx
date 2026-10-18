@@ -21,15 +21,21 @@ export function Navbar() {
     setMobileMenuOpen(false);
   }
 
-  // Prevent background scrolling when mobile menu is open
+  // Prevent background scrolling while the navigation drawer is open.
   useEffect(() => {
-    if (mobileMenuOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "unset";
-    }
+    if (!mobileMenuOpen) return;
+
+    const previousOverflow = document.body.style.overflow;
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setMobileMenuOpen(false);
+    };
+
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", handleKeyDown);
+
     return () => {
-      document.body.style.overflow = "unset";
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", handleKeyDown);
     };
   }, [mobileMenuOpen]);
 
@@ -49,15 +55,15 @@ export function Navbar() {
       </a>
 
       {/* Main Navigation Header */}
-      <header className="sticky top-0 z-40 bg-white border-b border-slate-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-20">
+      <header className="sticky top-0 z-40 border-b border-slate-200/90 bg-white">
+        <div className="site-container">
+          <div className="flex h-16 items-center justify-between gap-3 sm:h-20">
             {/* Logo and Brand Title */}
             <Link
               href="/"
-              className="flex items-center gap-3.5 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 rounded-md py-1"
+              className="group flex min-w-0 items-center gap-2.5 rounded-md py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 sm:gap-3.5"
             >
-              <div className="relative w-12 h-12 shrink-0 bg-white rounded-md border border-slate-200 p-0.5 overflow-hidden shadow-xs">
+              <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-md border border-slate-200 bg-white p-0.5 shadow-xs sm:h-12 sm:w-12">
                 <Image
                   src="/images/acm-iare-logo.jpg"
                   alt="ACM Student Chapter IARE Logo"
@@ -69,18 +75,18 @@ export function Navbar() {
               </div>
               <div className="flex flex-col">
                 <div className="flex items-center gap-1.5">
-                  <span className="font-extrabold text-lg text-[#14213d] tracking-tight group-hover:text-blue-700 transition-colors">
+                  <span className="text-[clamp(0.72rem,2.5vw,1rem)] font-extrabold leading-tight tracking-tight text-[#14213d] transition-colors group-hover:text-blue-700">
                     ACM STUDENT CHAPTER
                   </span>
                 </div>
-                <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                <span className="hidden text-[11px] font-medium text-slate-500 sm:block sm:text-xs">
                   Institute of Aeronautical Engineering
                 </span>
               </div>
             </Link>
 
             {/* Desktop Navigation Links */}
-            <nav className="hidden lg:flex items-center gap-1" aria-label="Main Navigation">
+            <nav className="hidden items-center gap-1 xl:flex" aria-label="Main Navigation">
               {NAVIGATION_LINKS.map((link) => {
                 const isActive = pathname === link.href || (link.href !== "/" && pathname.startsWith(link.href));
                 return (
@@ -102,7 +108,7 @@ export function Navbar() {
             </nav>
 
             {/* Desktop Action Buttons */}
-            <div className="hidden lg:flex items-center gap-3">
+            <div className="hidden items-center gap-3 xl:flex">
               <Button href="/events" variant="outline" size="sm">
                 Explore Events
               </Button>
@@ -112,12 +118,13 @@ export function Navbar() {
             </div>
 
             {/* Mobile Hamburger Toggle Button */}
-            <div className="flex lg:hidden items-center gap-2">
+            <div className="flex items-center gap-2 xl:hidden">
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 aria-expanded={mobileMenuOpen}
+                aria-controls="mobile-navigation-dialog"
                 aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
                 className="p-2 text-slate-800"
               >
@@ -130,22 +137,21 @@ export function Navbar() {
         {/* Mobile Navigation Drawer Overlay */}
         {mobileMenuOpen && (
           <div
-            className="fixed inset-0 top-20 z-50 bg-slate-900/40 backdrop-blur-xs lg:hidden"
+            className="fixed inset-0 top-16 z-50 bg-slate-950/35 backdrop-blur-[2px] sm:top-20 xl:hidden"
             onClick={() => setMobileMenuOpen(false)}
             aria-hidden="true"
           />
         )}
 
         {/* Mobile Navigation Menu Panel */}
-        <div
-          className={cn(
-            "fixed top-20 right-0 bottom-0 z-50 w-full max-w-sm bg-white border-l border-slate-200 shadow-xl p-6 flex flex-col justify-between transition-transform duration-200 ease-in-out lg:hidden",
-            mobileMenuOpen ? "translate-x-0" : "translate-x-full"
-          )}
-          role="dialog"
-          aria-modal="true"
-          aria-label="Mobile Navigation"
-        >
+        {mobileMenuOpen && (
+          <div
+            id="mobile-navigation-dialog"
+            className="drawer-enter fixed inset-y-16 right-0 z-50 flex w-[min(100vw,24rem)] max-w-full flex-col justify-between overflow-y-auto border-l border-slate-200 bg-white p-5 shadow-2xl sm:inset-y-20 sm:p-6 xl:hidden"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Mobile Navigation"
+          >
           <div className="space-y-4">
             <div className="text-xs font-bold text-slate-400 uppercase tracking-wider pb-2 border-b border-slate-100">
               Menu Navigation
@@ -198,7 +204,8 @@ export function Navbar() {
               </span>
             </div>
           </div>
-        </div>
+          </div>
+        )}
       </header>
     </>
   );

@@ -39,24 +39,23 @@ export default function AboutPage() {
 async function AboutPageContent() {
   const cms = await getCmsPublishedContent("about");
   const hero = cms.hero || {};
-  const narrative = cms.narrative || {};
   const mission = cms.mission || CHAPTER_INFO.mission;
   const vision = cms.vision || CHAPTER_INFO.vision;
 
   return (
     <div className="flex flex-col">
       {/* Header Banner */}
-      <section className="bg-slate-50 border-b border-slate-200 py-14 sm:py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-3xl space-y-4">
+      <section className="section-space border-b border-slate-200 bg-slate-50">
+        <div className="site-container">
+          <div className="hero-enter max-w-3xl space-y-4">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-800 border border-blue-200">
               <School className="w-3.5 h-3.5 text-blue-600" />
               Institutional Profile &amp; Charter
             </div>
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#14213d] tracking-tight">
+            <h1 className="display-heading font-extrabold text-[#14213d]">
               {hero.title || "About ACM Student Chapter at IARE"}
             </h1>
-            <p className="text-base sm:text-lg text-slate-600 leading-relaxed">
+            <p className="lead-copy text-base sm:text-lg">
               {hero.tagline ||
                 "Established in 2018, the chapter serves as the collegiate center of computing excellence at the Institute of Aeronautical Engineering, bridging foundational theory with software engineering practice."}
             </p>
@@ -65,8 +64,8 @@ async function AboutPageContent() {
       </section>
 
       {/* Institutional Overview & ACM Relationship */}
-      <section className="py-16 bg-white border-b border-slate-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="section-space bg-white border-b border-slate-200">
+        <div className="site-container">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             
             <div className="lg:col-span-7 space-y-5">
@@ -148,8 +147,8 @@ async function AboutPageContent() {
       </section>
 
       {/* Mission & Vision */}
-      <section className="py-16 bg-slate-50 border-b border-slate-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="section-space bg-slate-50 border-b border-slate-200">
+        <div className="site-container">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="academic-card p-8 bg-white">
               <div className="w-10 h-10 rounded-md bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-700 mb-4">
@@ -203,8 +202,8 @@ async function AboutPageContent() {
       </section>
 
       {/* Special Interest Groups (SIGs) Section */}
-      <section id="sigs" className="py-16 bg-white border-b border-slate-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section id="sigs" className="section-space bg-white border-b border-slate-200">
+        <div className="site-container">
           <SectionHeader
             badge="Technical Specialization"
             title="Special Interest Groups (SIGs)"
@@ -262,8 +261,8 @@ async function AboutPageContent() {
       </section>
 
       {/* Chapter Governance & Bylaws Summary */}
-      <section className="py-16 bg-slate-50 border-b border-slate-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <section className="section-space bg-slate-50 border-b border-slate-200">
+        <div className="site-container">
           <SectionHeader
             badge="Chapter Governance"
             title="Constitution &amp; Operating Bylaws"
@@ -305,7 +304,7 @@ async function AboutPageContent() {
       </section>
 
       {/* Frequently Asked Questions */}
-      <section className="py-16 bg-white border-b border-slate-200">
+      <section className="section-space bg-white border-b border-slate-200">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeader
             badge="Clarifications"
