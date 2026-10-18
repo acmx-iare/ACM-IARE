@@ -1,18 +1,31 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { Lock, ArrowRight, AlertCircle, Loader2, ShieldCheck, Eye, EyeOff } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { ArrowRight, AlertCircle, Loader2, ShieldCheck, Eye, EyeOff } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 
-export default function AdminLoginPage() {
+function AdminLoginContent() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const from = searchParams.get("from") || "/admin";
+
+  useEffect(() => {
+    fetch("/api/admin/auth")
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.authenticated) {
+          router.replace(from);
+        }
+      })
+      .catch(() => {});
+  }, [router, from]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,7 +41,7 @@ export default function AdminLoginPage() {
 
       const data = await res.json();
       if (res.ok && data.success) {
-        router.push("/admin");
+        router.push(from);
         router.refresh();
       } else {
         setError(data.error || "Invalid administrator credentials.");
@@ -41,7 +54,7 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <div className="min-h-[75vh] flex items-center justify-center p-4">
+    <div className="min-h-screen flex items-center justify-center p-4 bg-slate-50">
       <div className="max-w-md w-full bg-white border border-slate-200 rounded-xl shadow-sm p-6 sm:p-8 space-y-6">
         <div className="text-center space-y-2">
           <div className="w-14 h-14 mx-auto bg-slate-50 border border-slate-200 rounded-xl p-1 flex items-center justify-center shadow-xs">
@@ -101,7 +114,7 @@ export default function AdminLoginPage() {
                 {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
               </button>
             </div>
-            <p className="text-[11px] text-slate-400 mt-1.5">
+            <p className="text-[11px] text-slate-400 mt-1">
               Authorized chapter administrators and faculty coordinators only.
             </p>
           </div>
@@ -135,5 +148,22 @@ export default function AdminLoginPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function AdminLoginPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center bg-slate-50">
+          <div className="text-xs text-slate-500 flex items-center gap-2">
+            <Loader2 className="w-4 h-4 animate-spin text-blue-600" />
+            Loading authentication portal...
+          </div>
+        </div>
+      }
+    >
+      <AdminLoginContent />
+    </Suspense>
   );
 }

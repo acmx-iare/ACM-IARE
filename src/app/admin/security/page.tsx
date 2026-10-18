@@ -58,6 +58,10 @@ export default function AdminSecurityPage() {
   const fetchSecurityData = async () => {
     try {
       const res = await fetch("/api/admin/security");
+      if (res.status === 401) {
+        window.location.href = "/admin/login";
+        return;
+      }
       if (res.ok) {
         const data = await res.json();
         if (data.success) {

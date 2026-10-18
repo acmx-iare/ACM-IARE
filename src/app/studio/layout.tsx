@@ -1,7 +1,6 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { redirect } from "next/navigation";
 import {
   FileText,
   Image as ImageIcon,
@@ -10,7 +9,6 @@ import {
   Shield,
   Layers,
 } from "lucide-react";
-import { isAuthenticatedAdmin } from "@/lib/admin-auth";
 import { AdminLogoutButton } from "@/components/admin/AdminLogoutButton";
 
 export const metadata = {
@@ -23,6 +21,7 @@ export default function StudioLayout({
 }: {
   children: React.ReactNode;
 }) {
+
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-100 text-slate-800">

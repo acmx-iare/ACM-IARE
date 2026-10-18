@@ -30,11 +30,17 @@ function RegistrationsContent() {
     let isMounted = true;
 
     Promise.all([
-      fetch(`/api/admin/registrations${selectedEventId ? `?eventId=${selectedEventId}` : ""}`).then((r) => r.json()),
-      fetch("/api/admin/events").then((r) => r.json()),
+      fetch(`/api/admin/registrations${selectedEventId ? `?eventId=${selectedEventId}` : ""}`),
+      fetch("/api/admin/events"),
     ])
-      .then(([regData, eventData]) => {
+      .then(async ([regRes, eventRes]) => {
         if (!isMounted) return;
+        if (regRes.status === 401 || eventRes.status === 401) {
+          window.location.href = "/admin/login";
+          return;
+        }
+        const regData = await regRes.json();
+        const eventData = await eventRes.json();
         if (regData.success) setRegistrations(regData.registrations);
         if (eventData.success) setEvents(eventData.events);
       })

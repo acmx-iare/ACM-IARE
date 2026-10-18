@@ -20,6 +20,9 @@ import { getAllEvents, getEventBySlug } from "@/lib/events-store";
 
 export async function generateStaticParams() {
   const events = await getAllEvents(false);
+  if (!events || events.length === 0) {
+    return [{ slug: "git-and-open-source-bootcamp-2026" }];
+  }
   return events.map((event) => ({
     slug: event.slug,
   }));
