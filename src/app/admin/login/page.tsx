@@ -8,8 +8,8 @@ import { ArrowRight, AlertCircle, Loader2, ShieldCheck, Eye, EyeOff } from "luci
 import { Button } from "@/components/ui/Button";
 
 function AdminLoginContent() {
-  const [password, setPassword] = useState("acmiare2026admin");
-  const [showPassword, setShowPassword] = useState(true);
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
@@ -82,26 +82,6 @@ function AdminLoginContent() {
             <span>{error}</span>
           </div>
         )}
-
-        {/* Visible Admin Credential Helper */}
-        <div className="p-3 bg-blue-50/90 border border-blue-200 rounded-lg text-xs text-blue-900 flex items-center justify-between gap-2 shadow-xs">
-          <div>
-            <span className="font-semibold text-blue-950">Admin Password: </span>
-            <code className="font-mono bg-white px-2 py-0.5 rounded border border-blue-200 text-blue-800 font-bold select-all">
-              acmiare2026admin
-            </code>
-          </div>
-          <button
-            type="button"
-            onClick={() => {
-              setPassword("acmiare2026admin");
-              setShowPassword(true);
-            }}
-            className="text-[11px] font-semibold text-blue-700 hover:text-blue-900 underline shrink-0 cursor-pointer"
-          >
-            Fill
-          </button>
-        </div>
 
         <form onSubmit={handleLogin} className="space-y-4">
           <div>

@@ -22,12 +22,13 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
-    const { password } = await request.json();
-    if (!password) {
+    const body = await request.json().catch(() => ({}));
+    const rawPassword = body.password ? String(body.password).trim() : "";
+    if (!rawPassword) {
       return NextResponse.json({ success: false, error: "Password required" }, { status: 400 });
     }
 
-    const result = await setAdminSession(password);
+    const result = await setAdminSession(rawPassword);
     if (!result.success) {
       return NextResponse.json(
         { success: false, error: result.error || "Invalid administrator credentials" },
@@ -35,9 +36,21 @@ export async function POST(request: Request) {
       );
     }
 
-    return NextResponse.json({ success: true, message: "Authentication successful" });
-  } catch {
-    return NextResponse.json({ success: false, error: "Authentication error" }, { status: 500 });
+    const response = NextResponse.json({ success: true, message: "Authentication successful" });
+    if (result.sessionToken) {
+      response.cookies.set("acm_admin_session", result.sessionToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        path: "/",
+        maxAge: 60 * 60 * 24 * 7,
+      });
+    }
+
+    return response;
+  } catch (err) {
+    console.error("POST /api/admin/auth error:", err);
+    return NextResponse.json({ success: false, error: "Authentication system error" }, { status: 500 });
   }
 }
 
