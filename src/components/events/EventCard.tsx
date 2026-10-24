@@ -54,7 +54,7 @@ export function EventCard({ event, priority = false }: EventCardProps) {
           {/* Metadata Row */}
           <div className="flex flex-wrap items-center gap-y-1 gap-x-4 text-xs font-medium text-slate-500">
             <span className="inline-flex items-center gap-1.5">
-              <Calendar className="w-3.5 h-3.5 text-blue-600" />
+              <Calendar className="w-3.5 h-3.5 text-[#0097b2]" />
               {formatDate(event.date)}
             </span>
             <span className="inline-flex items-center gap-1.5">
@@ -64,7 +64,7 @@ export function EventCard({ event, priority = false }: EventCardProps) {
           </div>
 
           {/* Title */}
-          <h3 className="text-lg font-bold text-[#14213d] group-hover:text-blue-700 transition-colors leading-snug">
+          <h3 className="text-lg font-bold text-[#14213d] group-hover:text-[#0097b2] transition-colors leading-snug">
             <Link href={`/events/${event.slug}`} className="focus:outline-none">
               {event.title}
             </Link>
@@ -99,7 +99,7 @@ export function EventCard({ event, priority = false }: EventCardProps) {
 
             <Link
               href={`/events/${event.slug}`}
-              className="inline-flex items-center text-xs font-bold text-blue-600 group-hover:text-blue-800 transition-colors"
+              className="inline-flex items-center text-xs font-bold text-[#0097b2] hover:text-[#007a91] transition-colors"
             >
               Details
               <ArrowRight className="ml-1 w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />

@@ -4,17 +4,100 @@ import {
   CHAPTER_INFO,
   NAVIGATION_LINKS,
   CHAPTER_TEAM,
+  CORE_OFFICE_BEARERS,
   GALLERY_ITEMS,
   CHAPTER_ACHIEVEMENTS,
 } from "@/data/chapter";
+import type { GalleryItem, NavItem, TeamMember } from "@/types";
+
+export type CmsContentRecord = Record<string, unknown>;
+
+export interface CmsHomeContent {
+  hero?: {
+    badge?: string;
+    titlePrefix?: string;
+    highlightedWord?: string;
+    description?: string;
+    primaryButtonText?: string;
+    primaryButtonLink?: string;
+    secondaryButtonText?: string;
+    secondaryButtonLink?: string;
+    bgImage?: string;
+    illustrationUrl?: string;
+  };
+  announcement?: {
+    enabled?: boolean;
+    badge?: string;
+    text?: string;
+    linkText?: string;
+    linkHref?: string;
+  };
+  [key: string]: unknown;
+}
+
+export interface CmsAboutContent {
+  hero?: { title?: string; tagline?: string };
+  mission?: string;
+  vision?: string;
+  narrative?: { lead?: string; history?: string; storyImage?: string };
+  academicPillars?: Array<{ title: string; description: string }>;
+  [key: string]: unknown;
+}
+
+export interface CmsTeamContent {
+  hero?: { badge?: string; title?: string; description?: string };
+  members?: TeamMember[];
+  [key: string]: unknown;
+}
+
+export type CmsGalleryItem = Partial<GalleryItem> & {
+  id?: string;
+  title?: string;
+  category?: GalleryItem["category"];
+  imageUrl?: string;
+  year?: string;
+  date?: string;
+  caption?: string;
+  description?: string;
+  altText?: string;
+  isFeatured?: boolean;
+};
+
+export interface CmsGalleryContent {
+  hero?: { badge?: string; title?: string; description?: string };
+  galleryItems?: CmsGalleryItem[];
+  achievements?: Array<{ year?: string; title: string; description: string; category?: string }>;
+  layout?: { columns?: number; gap?: "compact" | "normal" | "spacious"; aspectRatio?: string };
+  [key: string]: unknown;
+}
+
+export interface CmsContactContent {
+  hero?: { title?: string; tagline?: string };
+  contactInfo?: {
+    email?: string;
+    facultyEmail?: string;
+    phone?: string;
+    address?: string;
+    mapUrl?: string;
+    mapImage?: string;
+  };
+  membershipInfo?: { title?: string; benefits?: string[] };
+  [key: string]: unknown;
+}
+
+export interface CmsGlobalContent {
+  navbar?: { brandTitle?: string; brandSubtitle?: string; links?: NavItem[] };
+  footer?: { description?: string; socials?: Record<string, string> };
+  [key: string]: unknown;
+}
 
 export interface CmsPage {
   id: string;
   slug: string;
   title: string;
   status: "published" | "draft" | "modified";
-  draft_content: any;
-  published_content: any;
+  draft_content: unknown;
+  published_content: unknown;
   current_revision: number;
   published_at?: string;
   published_by?: string;
@@ -26,7 +109,7 @@ export interface CmsRevision {
   id: string;
   page_id: string;
   version: number;
-  data: any;
+  data: unknown;
   status: string;
   change_summary?: string;
   created_by?: string;
@@ -49,7 +132,7 @@ export interface CmsMediaItem {
 /**
  * Default fallback contents for each managed page
  */
-export const DEFAULT_PAGE_CONTENTS: Record<string, any> = {
+export const DEFAULT_PAGE_CONTENTS: Record<string, CmsContentRecord> = {
   home: {
     hero: {
       badge: "Official Chapter ID • Established 2018",
@@ -107,12 +190,12 @@ export const DEFAULT_PAGE_CONTENTS: Record<string, any> = {
 
   team: {
     hero: {
-      badge: "Leadership & Advisory Council",
-      title: "Chapter Team & Office Bearers",
+      badge: "Executive Leadership Council",
+      title: "Core Chapter Office Bearers",
       description:
-        "The ACM Student Chapter at IARE is guided by dedicated faculty scholars and operated by democratically elected student officers committed to technical service and academic integrity.",
+        "Meet the democratically elected executive council leading the ACM Student Chapter at IARE, driving technical innovation, student mentorship, and competitive programming initiatives.",
     },
-    members: CHAPTER_TEAM,
+    members: CORE_OFFICE_BEARERS,
   },
 
   gallery: {
@@ -170,7 +253,7 @@ export const DEFAULT_PAGE_CONTENTS: Record<string, any> = {
 export async function ensureCmsSeeded(): Promise<void> {
   try {
     const existing = await sql`SELECT slug FROM cms_pages;`;
-    const existingSlugs = new Set((existing || []).map((r: any) => r.slug));
+    const existingSlugs = new Set((existing || []).map((row) => row.slug));
 
     const pageConfigs = [
       { id: "page_home", slug: "home", title: "Home Page" },
@@ -280,7 +363,11 @@ export async function getCmsPage(idOrSlug: string): Promise<CmsPage | null> {
   }
 }
 
-async function fetchPublishedContentRaw(slug: string): Promise<any> {
+function isCmsContentRecord(value: unknown): value is CmsContentRecord {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+async function fetchPublishedContentRaw(slug: string): Promise<CmsContentRecord> {
   const fallback = DEFAULT_PAGE_CONTENTS[slug] || {};
   try {
     const rows = await sql`
@@ -290,11 +377,10 @@ async function fetchPublishedContentRaw(slug: string): Promise<any> {
       LIMIT 1;
     `;
 
-    if (rows && rows.length > 0 && rows[0].published_content) {
-      const published = rows[0].published_content;
-      return { ...fallback, ...published };
+    if (rows && rows.length > 0 && isCmsContentRecord(rows[0].published_content)) {
+      return { ...fallback, ...rows[0].published_content };
     }
-  } catch (err) {
+  } catch {
     console.warn(`CMS published content fallback used for [${slug}]`);
   }
   return fallback;
@@ -303,7 +389,7 @@ async function fetchPublishedContentRaw(slug: string): Promise<any> {
 /**
  * Get published content for public website with seamless fallback to static defaults
  */
-export async function getCmsPublishedContent<T = any>(slug: string): Promise<T> {
+export async function getCmsPublishedContent<T = CmsContentRecord>(slug: string): Promise<T> {
   const getCached = unstable_cache(
     async (s: string) => fetchPublishedContentRaw(s),
     ["cms-published-content"],
@@ -317,7 +403,7 @@ export async function getCmsPublishedContent<T = any>(slug: string): Promise<T> 
  */
 export async function saveCmsDraft(
   pageIdOrSlug: string,
-  draftContent: any,
+  draftContent: unknown,
   updatedBy: string = "admin"
 ): Promise<{ success: boolean; error?: string }> {
   try {

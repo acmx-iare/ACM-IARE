@@ -6,7 +6,6 @@ import {
   ExternalLink,
   CheckCircle2,
   AlertTriangle,
-  History,
   Image as ImageIcon,
   Sparkles,
   ShieldCheck,
@@ -15,8 +14,6 @@ import {
 import { getAllCmsPages, listCmsMedia } from "@/lib/cms-store";
 import { isAuthenticatedAdmin } from "@/lib/admin-auth";
 import { redirect } from "next/navigation";
-import { Badge } from "@/components/ui/Badge";
-import { Button } from "@/components/ui/Button";
 
 export const metadata = {
   title: "Website Studio Dashboard | ACM IARE",

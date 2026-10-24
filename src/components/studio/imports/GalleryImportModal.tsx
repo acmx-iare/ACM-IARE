@@ -22,7 +22,7 @@ import { MediaPickerModal, SelectedMediaItem } from "./MediaPickerModal";
 export interface ImportedGalleryItem {
   id: string;
   title: string;
-  category: string;
+  category: "Hackathons" | "Workshops" | "Celebrations" | "Community";
   imageUrl: string;
   year: string;
   date?: string;
@@ -240,7 +240,7 @@ export function GalleryImportModal({
       completedItems.push({
         id: `gal-${Date.now()}-${i}-${Math.random().toString(36).substring(2, 6)}`,
         title: item.title,
-        category: item.category,
+        category: (item.category as ImportedGalleryItem["category"]) || "Hackathons",
         imageUrl: finalUrl,
         year: item.year,
         date: `${item.year}-03-15`,

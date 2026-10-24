@@ -17,6 +17,11 @@ export interface AdminUser {
   passwordChangedAt?: string;
 }
 
+type MatchedAdminUser = Pick<AdminUser, "id" | "username" | "email" | "role"> & {
+  password_hash?: string;
+  full_name?: string;
+};
+
 /**
  * Validates password strength policy
  */
@@ -95,7 +100,10 @@ export async function getAuthenticatedAdminUser(): Promise<AdminUser | null> {
     }
 
     return null;
-  } catch (err) {
+  } catch (err: unknown) {
+    if (typeof err === "object" && err !== null && ("digest" in err || (err as { name?: string }).name === "DynamicServerError")) {
+      throw err;
+    }
     console.warn("Session authentication check notice:", err);
     return null;
   }
@@ -106,7 +114,7 @@ export async function getAuthenticatedAdminUser(): Promise<AdminUser | null> {
  */
 export async function setAdminSession(password: string): Promise<{ success: boolean; error?: string }> {
   try {
-    let matchedUser: any = null;
+    let matchedUser: MatchedAdminUser | null = null;
 
     // 1. Query admin_users from Neon
     const userRows = await sql`
@@ -120,7 +128,7 @@ export async function setAdminSession(password: string): Promise<{ success: bool
       for (const u of userRows) {
         const isMatch = await bcrypt.compare(password, u.password_hash);
         if (isMatch) {
-          matchedUser = u;
+          matchedUser = u as unknown as MatchedAdminUser;
           break;
         }
       }
@@ -180,7 +188,7 @@ export async function setAdminSession(password: string): Promise<{ success: bool
         INSERT INTO audit_logs (action, event_id, status, error_message)
         VALUES ('admin_login_success', ${matchedUser.username}, 'success', ${`Admin authenticated: ${matchedUser.email}`});
       `;
-    } catch {}
+    } catch { }
 
     return { success: true };
   } catch (err: unknown) {
@@ -200,7 +208,7 @@ export async function clearAdminSession(): Promise<void> {
     const tokenHash = crypto.createHash("sha256").update(sessionCookie.value).digest("hex");
     try {
       await sql`DELETE FROM admin_sessions WHERE session_token_hash = ${tokenHash}`;
-    } catch {}
+    } catch { }
   }
   cookieStore.delete(COOKIE_NAME);
 }

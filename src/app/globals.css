@@ -2,21 +2,37 @@
 
 :root {
   color-scheme: light;
+
+  /* Official ACM IARE Brand Palette derived from acm-iare-logo.jpg */
+  --color-acm-teal: #0097b2;
+  --color-acm-teal-dark: #007a91;
+  --color-acm-teal-darker: #005f71;
+  --color-acm-teal-light: #00b4d8;
+  --color-acm-teal-tint: #f0fdfa;
+  --color-acm-teal-border: #ccfbf1;
+
+  /* Deep Collegiate Navy for maximum readability and high contrast */
   --color-navy: #14213d;
   --color-navy-dark: #0b1324;
-  --color-acm-blue: #2563eb;
-  --color-acm-blue-dark: #1d4ed8;
-  --color-teal-accent: #0f766e;
+  --color-navy-surface: #1e293b;
+
+  /* Brand mapped compatibility tokens */
+  --color-acm-blue: #0097b2;
+  --color-acm-blue-dark: #007a91;
+  --color-teal-accent: #00829b;
+
   --color-bg-light: #f8fafc;
   --color-surface-subtle: #f1f5f9;
   --color-border-default: #e2e8f0;
   --color-text-muted: #475569;
+
   --content-width: 80rem;
   --page-gutter: clamp(1rem, 4vw, 2rem);
-  --section-space: clamp(3.5rem, 7vw, 6rem);
+  --section-space: clamp(3.25rem, 6vw, 5.5rem);
   --radius-card: 0.75rem;
-  --shadow-card: 0 1px 3px rgb(15 23 42 / 0.05);
-  --shadow-card-hover: 0 10px 28px rgb(15 23 42 / 0.09);
+  --shadow-card: 0 1px 3px rgb(15 23 42 / 0.04), 0 1px 2px rgb(15 23 42 / 0.02);
+  --shadow-card-hover: 0 12px 24px -6px rgba(0, 151, 178, 0.09), 0 4px 8px -4px rgba(15, 23, 42, 0.04);
+  
   --motion-fast: 160ms;
   --motion-standard: 220ms;
   --ease-standard: cubic-bezier(0.2, 0.7, 0.2, 1);
@@ -35,8 +51,8 @@ body {
 }
 
 ::selection {
-  background-color: #dbeafe;
-  color: #1e3a8a;
+  background-color: #ccfbf1;
+  color: #005f71;
 }
 
 .site-container {
@@ -50,27 +66,46 @@ body {
 
 .display-heading {
   max-width: 18ch;
-  font-size: clamp(2.25rem, 5.4vw, 4.5rem);
-  line-height: 1.04;
-  letter-spacing: -0.045em;
+  font-size: clamp(2.15rem, 4.8vw, 4rem);
+  line-height: 1.08;
+  letter-spacing: -0.04em;
   text-wrap: balance;
 }
 
 .section-heading {
-  font-size: clamp(1.5rem, 3.2vw, 2.25rem);
-  line-height: 1.12;
-  letter-spacing: -0.035em;
+  font-size: clamp(1.4rem, 2.8vw, 2.15rem);
+  line-height: 1.15;
+  letter-spacing: -0.03em;
   text-wrap: balance;
 }
 
 .lead-copy {
   max-width: 66ch;
   color: var(--color-text-muted);
-  line-height: 1.75;
+  line-height: 1.7;
   text-wrap: pretty;
 }
 
-/* Crisp shared surface; use only for content that benefits from grouping. */
+/* Subtle, authentic brand background inspired by the ACM diamond geometry */
+.brand-hero-bg {
+  background-color: #fafcfd;
+  background-image:
+    radial-gradient(100% 70% at 50% -15%, rgba(0, 151, 178, 0.08) 0%, rgba(0, 180, 216, 0.02) 50%, transparent 80%),
+    linear-gradient(135deg, rgba(0, 151, 178, 0.02) 25%, transparent 25%),
+    linear-gradient(225deg, rgba(0, 151, 178, 0.02) 25%, transparent 25%),
+    linear-gradient(45deg, rgba(0, 151, 178, 0.02) 25%, transparent 25%),
+    linear-gradient(315deg, rgba(0, 151, 178, 0.02) 25%, transparent 25%);
+  background-position: 0 0, 16px 0, 16px -16px, 0px 16px, 0 0;
+  background-size: 100% 100%, 32px 32px, 32px 32px, 32px 32px, 32px 32px;
+}
+
+/* Faint section background with delicate ambient teal light */
+.brand-subtle-bg {
+  background-color: #fcfdfe;
+  background-image: radial-gradient(80% 50% at 50% 0%, rgba(0, 151, 178, 0.04) 0%, transparent 70%);
+}
+
+/* Crisp academic shared surface */
 .academic-card {
   min-width: 0;
   background-color: #ffffff;
@@ -85,19 +120,19 @@ body {
 
 @media (hover: hover) and (pointer: fine) {
   .academic-card:hover {
-    border-color: #cbd5e1;
+    border-color: #99f6e4;
     box-shadow: var(--shadow-card-hover);
     transform: translateY(-2px);
   }
 }
 
 :where(a, button, input, textarea, select, summary):focus-visible {
-  outline: 2px solid var(--color-acm-blue);
+  outline: 2px solid var(--color-acm-teal);
   outline-offset: 3px;
 }
 
 .hero-enter {
-  animation: hero-enter 560ms var(--ease-standard) both;
+  animation: hero-enter 480ms var(--ease-standard) both;
 }
 
 .drawer-enter {
@@ -119,7 +154,7 @@ body {
 @keyframes hero-enter {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(8px);
   }
 
   to {

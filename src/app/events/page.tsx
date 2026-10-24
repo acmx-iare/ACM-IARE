@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect, useMemo } from "react";
 import { Search, Calendar, Filter, Sparkles } from "lucide-react";
-import { CHAPTER_EVENTS } from "@/data/chapter";
 import { ChapterEvent } from "@/types";
 import { EventCard } from "@/components/events/EventCard";
 import { Button } from "@/components/ui/Button";
@@ -12,7 +11,8 @@ type FilterTab = "All" | "Upcoming" | "Past" | "Hackathon" | "Workshop" | "Tech 
 export default function EventsPage() {
   const [selectedTab, setSelectedTab] = useState<FilterTab>("All");
   const [searchQuery, setSearchQuery] = useState("");
-  const [eventsList, setEventsList] = useState<ChapterEvent[]>(CHAPTER_EVENTS);
+  const [eventsList, setEventsList] = useState<ChapterEvent[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetch("/api/events")
@@ -22,7 +22,8 @@ export default function EventsPage() {
           setEventsList(data.events);
         }
       })
-      .catch((err) => console.warn("Could not refresh events from API:", err));
+      .catch((err) => console.warn("Could not refresh events from API:", err))
+      .finally(() => setLoading(false));
   }, []);
 
   const filteredEvents = useMemo(() => {
@@ -53,11 +54,12 @@ export default function EventsPage() {
     });
   }, [eventsList, selectedTab, searchQuery]);
 
+  const allCount = eventsList.length;
   const upcomingCount = eventsList.filter((e) => e.status === "upcoming").length;
   const pastCount = eventsList.filter((e) => e.status === "past").length;
 
   const tabs: { label: string; value: FilterTab; badge?: number }[] = [
-    { label: "All Events", value: "All", badge: CHAPTER_EVENTS.length },
+    { label: "All Events", value: "All", badge: allCount },
     { label: "Upcoming", value: "Upcoming", badge: upcomingCount },
     { label: "Past Archive", value: "Past", badge: pastCount },
     { label: "Hackathons", value: "Hackathon" },
@@ -69,11 +71,11 @@ export default function EventsPage() {
   return (
     <div className="flex flex-col min-h-screen bg-slate-50">
       {/* Header Banner */}
-      <section className="bg-white border-b border-slate-200 section-space">
+      <section className="bg-white border-b border-slate-200 brand-subtle-bg section-space">
         <div className="site-container">
           <div className="hero-enter max-w-3xl space-y-3">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-800 border border-blue-200">
-              <Calendar className="w-3.5 h-3.5 text-blue-600" />
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md text-xs font-semibold bg-teal-50/80 text-[#007a91] border border-[#0097b2]/30">
+              <Calendar className="w-3.5 h-3.5 text-[#0097b2]" />
               Chapter Calendar &amp; Workshops
             </div>
             <h1 className="display-heading font-extrabold text-[#14213d]">
@@ -96,7 +98,7 @@ export default function EventsPage() {
                     role="tab"
                     aria-selected={isSelected}
                     onClick={() => setSelectedTab(tab.value)}
-                    className={`inline-flex min-h-10 items-center gap-1.5 rounded-md px-3 py-2 text-xs font-semibold transition-colors motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 ${
+                    className={`inline-flex min-h-10 items-center gap-1.5 rounded-md px-3 py-2 text-xs font-semibold transition-colors motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0097b2] ${
                       isSelected
                         ? "bg-[#14213d] text-white shadow-xs"
                         : "bg-slate-100 text-slate-700 hover:bg-slate-200"
@@ -107,7 +109,7 @@ export default function EventsPage() {
                       <span
                         className={`px-1.5 py-0.2 rounded-full text-[10px] ${
                           isSelected
-                            ? "bg-blue-600 text-white"
+                            ? "bg-[#0097b2] text-white"
                             : "bg-slate-200 text-slate-700"
                         }`}
                       >
@@ -127,7 +129,7 @@ export default function EventsPage() {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search event title, venue..."
-                className="min-h-10 w-full rounded-md border border-slate-300 bg-white py-2 pl-9 pr-3.5 text-xs placeholder-slate-400 focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600 sm:text-sm"
+                className="min-h-10 w-full rounded-md border border-slate-300 bg-white py-2 pl-9 pr-3.5 text-xs placeholder-slate-400 focus:border-[#0097b2] focus:outline-none focus:ring-2 focus:ring-[#0097b2] sm:text-sm"
                 aria-label="Search events"
               />
               {searchQuery && (
@@ -146,11 +148,29 @@ export default function EventsPage() {
 
       {/* Events Grid Content */}
       <section className="py-12 site-container w-full flex-1">
-        {filteredEvents.length > 0 ? (
+        {loading ? (
+          <div className="text-center py-16 bg-white border border-slate-200 rounded-lg p-8 max-w-md mx-auto space-y-3">
+            <Calendar className="w-8 h-8 text-[#0097b2] animate-pulse mx-auto" />
+            <h3 className="font-bold text-base text-[#14213d]">Loading Chapter Events...</h3>
+            <p className="text-xs text-slate-400">Fetching latest schedule from chapter database.</p>
+          </div>
+        ) : filteredEvents.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredEvents.map((event) => (
               <EventCard key={event.id} event={event} />
             ))}
+          </div>
+        ) : eventsList.length === 0 ? (
+          <div className="text-center py-16 bg-white border border-slate-200 rounded-lg p-8 max-w-md mx-auto space-y-4">
+            <div className="w-12 h-12 rounded-full bg-blue-50 text-blue-600 mx-auto flex items-center justify-center">
+              <Calendar className="w-6 h-6" />
+            </div>
+            <div>
+              <h3 className="font-bold text-base text-[#14213d]">No Events Scheduled Currently</h3>
+              <p className="text-xs text-slate-500 mt-1">
+                We are actively curating new workshops, hackathons, and guest lectures. Check back soon for announcements!
+              </p>
+            </div>
           </div>
         ) : (
           <div className="text-center py-16 bg-white border border-slate-200 rounded-lg p-8 max-w-md mx-auto space-y-4">

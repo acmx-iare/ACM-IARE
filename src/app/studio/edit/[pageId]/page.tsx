@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import {
   FileText,
   Save,
@@ -15,13 +15,9 @@ import {
   Loader2,
   ArrowLeft,
   History,
-  Layers,
   Sparkles,
-  ExternalLink,
   Plus,
   Trash2,
-  ChevronDown,
-  ChevronUp,
   Image as ImageIcon,
   Upload,
   FolderUp,
@@ -46,16 +42,49 @@ import { GalleryImportModal, ImportedGalleryItem } from "@/components/studio/imp
 import { TeamCsvImportModal } from "@/components/studio/imports/TeamCsvImportModal";
 import { DocumentImportModal } from "@/components/studio/imports/DocumentImportModal";
 import { NavigationImportModal } from "@/components/studio/imports/NavigationImportModal";
-import { TeamMember, TeamCategory } from "@/types";
+import { TeamMember, TeamCategory, GalleryItem } from "@/types";
+import type {
+  CmsAboutContent,
+  CmsContactContent,
+  CmsGalleryContent,
+  CmsGalleryItem,
+  CmsGlobalContent,
+  CmsHomeContent,
+  CmsPage,
+  CmsRevision,
+  CmsTeamContent,
+} from "@/lib/cms-store";
+
+ type StudioFormData = CmsHomeContent & CmsAboutContent & CmsTeamContent & CmsGalleryContent & CmsContactContent & CmsGlobalContent;
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function toStudioFormData(value: unknown): StudioFormData {
+  return isRecord(value) ? (value as StudioFormData) : {};
+}
+
+async function requestStudioPage(pageId: string): Promise<CmsPage | null> {
+  const res = await fetch(`/api/studio/pages/${pageId}`);
+  if (!res.ok) throw new Error("Failed to load page");
+
+  const data: { success?: boolean; page?: CmsPage } = await res.json();
+  return data.success ? data.page ?? null : null;
+}
+
+function cloneStudioFormData(value: unknown): StudioFormData {
+  return toStudioFormData(JSON.parse(JSON.stringify(value)) as unknown);
+}
 
 function StudioEditContent() {
   const params = useParams();
-  const router = useRouter();
   const pageId = (params?.pageId as string) || "";
 
-  const [page, setPage] = useState<any>(null);
-  const [formData, setFormData] = useState<any>({});
-  const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState<CmsPage | null>(null);
+  const [formData, setFormData] = useState<StudioFormData>({});
+  const [loadedPageId, setLoadedPageId] = useState<string | null>(null);
+  const loading = loadedPageId !== pageId;
   const [savingDraft, setSavingDraft] = useState(false);
   const [publishing, setPublishing] = useState(false);
   const [successNotice, setSuccessNotice] = useState<string | null>(null);
@@ -63,7 +92,7 @@ function StudioEditContent() {
 
   // Revision history state
   const [showRevisions, setShowRevisions] = useState(false);
-  const [revisions, setRevisions] = useState<any[]>([]);
+  const [revisions, setRevisions] = useState<CmsRevision[]>([]);
   const [loadingRevisions, setLoadingRevisions] = useState(false);
   const [revertingVersion, setRevertingVersion] = useState<number | null>(null);
 
@@ -101,27 +130,46 @@ function StudioEditContent() {
   // Global Nav Preview Device
   const [navPreviewDevice, setNavPreviewDevice] = useState<"desktop" | "mobile">("desktop");
 
-  const fetchPageData = async () => {
+  const refreshPageData = async () => {
     try {
-      setLoading(true);
-      const res = await fetch(`/api/studio/pages/${pageId}`);
-      if (!res.ok) throw new Error("Failed to load page");
-      const data = await res.json();
-      if (data.success && data.page) {
-        setPage(data.page);
-        // Load draft content if present, else published content
-        const activeContent = data.page.draft_content || data.page.published_content || {};
-        setFormData(JSON.parse(JSON.stringify(activeContent)));
+      const nextPage = await requestStudioPage(pageId);
+      setPage(nextPage);
+      if (nextPage) {
+        const activeContent = nextPage.draft_content || nextPage.published_content || {};
+        setFormData(cloneStudioFormData(activeContent));
       }
     } catch {
       setErrorNotice("Could not load page data from CMS database.");
-    } finally {
-      setLoading(false);
     }
   };
 
   useEffect(() => {
-    if (pageId) fetchPageData();
+    let active = true;
+
+    requestStudioPage(pageId)
+      .then((nextPage) => {
+        if (!active) return;
+        setPage(nextPage);
+        if (nextPage) {
+          const activeContent = nextPage.draft_content || nextPage.published_content || {};
+          setFormData(cloneStudioFormData(activeContent));
+        } else {
+          setErrorNotice("Could not load page data from CMS database.");
+        }
+      })
+      .catch(() => {
+        if (active) {
+          setPage(null);
+          setErrorNotice("Could not load page data from CMS database.");
+        }
+      })
+      .finally(() => {
+        if (active) setLoadedPageId(pageId);
+      });
+
+    return () => {
+      active = false;
+    };
   }, [pageId]);
 
   const fetchRevisions = async () => {
@@ -154,7 +202,7 @@ function StudioEditContent() {
       const data = await res.json();
       if (res.ok && data.success) {
         setSuccessNotice("Draft saved successfully. Content is preserved in draft mode.");
-        setPage((prev: any) => ({ ...prev, status: "modified" }));
+        setPage((previousPage) => previousPage ? { ...previousPage, status: "modified" } : previousPage);
       } else {
         setErrorNotice(data.error || "Failed to save draft.");
       }
@@ -190,7 +238,7 @@ function StudioEditContent() {
         setShowPublishModal(false);
         setChangeSummary("");
         setSuccessNotice(`Page published live (Revision #${data.newVersion})! Public site cache updated.`);
-        fetchPageData();
+        refreshPageData();
       } else {
         setErrorNotice(data.error || "Failed to publish page.");
       }
@@ -221,7 +269,7 @@ function StudioEditContent() {
       if (res.ok && data.success) {
         setSuccessNotice(`Successfully rolled back to Revision #${version}!`);
         setShowRevisions(false);
-        fetchPageData();
+        refreshPageData();
       } else {
         setErrorNotice(data.error || "Failed to rollback.");
       }
@@ -280,10 +328,10 @@ function StudioEditContent() {
 
   const handleMediaPickerSelectMultiple = (items: SelectedMediaItem[]) => {
     if (mediaPickerContext.target === "galleryBulk") {
-      const newItems = items.map((it, idx) => ({
+      const newItems: CmsGalleryItem[] = items.map((it, idx) => ({
         id: `gal-${Date.now()}-${idx}`,
         title: it.altText || it.fileName.replace(/\.[^/.]+$/, ""),
-        category: "Hackathons",
+        category: "Hackathons" as const,
         imageUrl: it.url,
         year: "2026",
         caption: `Documentation archive of ${it.fileName}`,
@@ -315,8 +363,8 @@ function StudioEditContent() {
     setSuccessNotice(`Successfully updated team roster draft (${updatedMembers.length} members).`);
   };
 
-  const handleDocumentImport = (mappedData: Record<string, any>) => {
-    setFormData(mappedData);
+  const handleDocumentImport = (mappedData: Record<string, unknown>) => {
+    setFormData(toStudioFormData(mappedData));
     setSuccessNotice("Successfully imported document content into working draft.");
   };
 
@@ -932,14 +980,14 @@ function StudioEditContent() {
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                {(formData.academicPillars || []).map((pillar: any, index: number) => (
+                {(formData.academicPillars || []).map((pillar, index) => (
                   <div key={index} className="p-3 bg-slate-50 rounded-lg border border-slate-200 space-y-2">
                     <div className="flex items-center justify-between">
                       <span className="text-[11px] font-bold text-slate-600">Pillar #{index + 1}</span>
                       <button
                         type="button"
                         onClick={() => {
-                          const updated = formData.academicPillars.filter((_: any, i: number) => i !== index);
+                          const updated = (formData.academicPillars || []).filter((_, i) => i !== index);
                           setFormData({ ...formData, academicPillars: updated });
                         }}
                         className="text-red-500 hover:text-red-700 text-xs"
@@ -952,7 +1000,7 @@ function StudioEditContent() {
                       type="text"
                       value={pillar.title || ""}
                       onChange={(e) => {
-                        const updated = [...formData.academicPillars];
+                        const updated = [...(formData.academicPillars || [])];
                         updated[index].title = e.target.value;
                         setFormData({ ...formData, academicPillars: updated });
                       }}
@@ -964,7 +1012,7 @@ function StudioEditContent() {
                       rows={2}
                       value={pillar.description || ""}
                       onChange={(e) => {
-                        const updated = [...formData.academicPillars];
+                        const updated = [...(formData.academicPillars || [])];
                         updated[index].description = e.target.value;
                         setFormData({ ...formData, academicPillars: updated });
                       }}
@@ -1010,11 +1058,11 @@ function StudioEditContent() {
                   variant="outline"
                   size="sm"
                   onClick={() => {
-                    const newMember = {
+                    const newMember: TeamMember = {
                       id: `team-${Date.now()}`,
                       name: "New Member",
                       role: "Officer",
-                      category: "Office Bearers",
+                      category: "Office Bearers" as TeamCategory,
                       department: "Computer Science and Engineering",
                       bio: "Student officer biography.",
                       imageUrl: "/images/team/placeholder.jpg",
@@ -1053,8 +1101,8 @@ function StudioEditContent() {
             {/* Members List */}
             <div className="space-y-4">
               {(formData.members || [])
-                .map((member: any, index: number) => ({ member, index }))
-                .filter(({ member }: any) =>
+                .map((member, index) => ({ member, index }))
+                .filter(({ member }) =>
                   teamCategoryFilter === "All" ? true : member.category === teamCategoryFilter
                 )
                 .map(({ member, index }: any) => (
@@ -1074,7 +1122,7 @@ function StudioEditContent() {
                           type="button"
                           disabled={index === 0}
                           onClick={() => {
-                            const updated = [...formData.members];
+                            const updated = [...(formData.members || [])];
                             const temp = updated[index];
                             updated[index] = updated[index - 1];
                             updated[index - 1] = temp;
@@ -1087,9 +1135,9 @@ function StudioEditContent() {
                         </button>
                         <button
                           type="button"
-                          disabled={index === formData.members.length - 1}
+                          disabled={index === (formData.members?.length || 0) - 1}
                           onClick={() => {
-                            const updated = [...formData.members];
+                            const updated = [...(formData.members || [])];
                             const temp = updated[index];
                             updated[index] = updated[index + 1];
                             updated[index + 1] = temp;
@@ -1103,7 +1151,7 @@ function StudioEditContent() {
                         <button
                           type="button"
                           onClick={() => {
-                            const updated = formData.members.filter((_: any, i: number) => i !== index);
+                            const updated = (formData.members || []).filter((_, i) => i !== index);
                             setFormData({ ...formData, members: updated });
                           }}
                           className="text-red-500 hover:text-red-700 text-xs flex items-center gap-1 font-semibold ml-2"
@@ -1152,7 +1200,7 @@ function StudioEditContent() {
                             type="text"
                             value={member.name || ""}
                             onChange={(e) => {
-                              const updated = [...formData.members];
+                              const updated = [...(formData.members || [])];
                               updated[index].name = e.target.value;
                               setFormData({ ...formData, members: updated });
                             }}
@@ -1166,7 +1214,7 @@ function StudioEditContent() {
                             type="text"
                             value={member.role || ""}
                             onChange={(e) => {
-                              const updated = [...formData.members];
+                              const updated = [...(formData.members || [])];
                               updated[index].role = e.target.value;
                               setFormData({ ...formData, members: updated });
                             }}
@@ -1179,8 +1227,8 @@ function StudioEditContent() {
                           <select
                             value={member.category || "Office Bearers"}
                             onChange={(e) => {
-                              const updated = [...formData.members];
-                              updated[index].category = e.target.value;
+                              const updated = [...(formData.members || [])];
+                              updated[index].category = e.target.value as TeamCategory;
                               setFormData({ ...formData, members: updated });
                             }}
                             className="w-full px-3 py-1.5 text-xs border border-slate-300 rounded-md bg-white"
@@ -1198,7 +1246,7 @@ function StudioEditContent() {
                             type="text"
                             value={member.department || ""}
                             onChange={(e) => {
-                              const updated = [...formData.members];
+                              const updated = [...(formData.members || [])];
                               updated[index].department = e.target.value;
                               setFormData({ ...formData, members: updated });
                             }}
@@ -1212,7 +1260,7 @@ function StudioEditContent() {
                             type="email"
                             value={member.email || ""}
                             onChange={(e) => {
-                              const updated = [...formData.members];
+                              const updated = [...(formData.members || [])];
                               updated[index].email = e.target.value;
                               setFormData({ ...formData, members: updated });
                             }}
@@ -1227,7 +1275,7 @@ function StudioEditContent() {
                             rows={2}
                             value={member.bio || ""}
                             onChange={(e) => {
-                              const updated = [...formData.members];
+                              const updated = [...(formData.members || [])];
                               updated[index].bio = e.target.value;
                               setFormData({ ...formData, members: updated });
                             }}
@@ -1294,10 +1342,10 @@ function StudioEditContent() {
                   variant="outline"
                   size="sm"
                   onClick={() => {
-                    const newItem = {
+                    const newItem: CmsGalleryItem = {
                       id: `gal-${Date.now()}`,
                       title: "New Gallery Entry",
-                      category: "Hackathons",
+                      category: "Hackathons" as const,
                       imageUrl: "/images/gallery/placeholder.jpg",
                       year: "2026",
                       date: "2026-03-15",
@@ -1389,7 +1437,7 @@ function StudioEditContent() {
                     onChange={(e) =>
                       setFormData({
                         ...formData,
-                        layout: { ...formData.layout, gap: e.target.value },
+                        layout: { ...formData.layout, gap: e.target.value as "compact" | "normal" | "spacious" },
                       })
                     }
                     className="w-full px-2.5 py-1 text-xs border border-slate-300 rounded-md bg-white"
@@ -1444,9 +1492,9 @@ function StudioEditContent() {
                   <button
                     type="button"
                     onClick={() => {
-                      const updated = [...formData.galleryItems];
+                      const updated = [...(formData.galleryItems || [])];
                       selectedGalleryIndices.forEach((idx) => {
-                        if (updated[idx]) updated[idx].category = galleryBulkCategory;
+                        if (updated[idx]) updated[idx].category = galleryBulkCategory as any;
                       });
                       setFormData({ ...formData, galleryItems: updated });
                       setSuccessNotice(`Updated category for ${selectedGalleryIndices.length} items.`);
@@ -1460,7 +1508,7 @@ function StudioEditContent() {
                     type="button"
                     onClick={() => {
                       if (confirm(`Remove ${selectedGalleryIndices.length} items from gallery draft? (Assets in R2 storage will not be deleted).`)) {
-                        const updated = formData.galleryItems.filter(
+                        const updated = (formData.galleryItems || []).filter(
                           (_: any, idx: number) => !selectedGalleryIndices.includes(idx)
                         );
                         setFormData({ ...formData, galleryItems: updated });
@@ -1537,7 +1585,7 @@ function StudioEditContent() {
                           <button
                             type="button"
                             onClick={() => {
-                              const updated = [...formData.galleryItems];
+                              const updated = [...(formData.galleryItems || [])];
                               updated[index].isFeatured = !updated[index].isFeatured;
                               setFormData({ ...formData, galleryItems: updated });
                             }}
@@ -1556,7 +1604,7 @@ function StudioEditContent() {
                             type="button"
                             disabled={index === 0}
                             onClick={() => {
-                              const updated = [...formData.galleryItems];
+                              const updated = [...(formData.galleryItems || [])];
                               const temp = updated[index];
                               updated[index] = updated[index - 1];
                               updated[index - 1] = temp;
@@ -1569,9 +1617,9 @@ function StudioEditContent() {
                           </button>
                           <button
                             type="button"
-                            disabled={index === formData.galleryItems.length - 1}
+                            disabled={index === (formData.galleryItems?.length || 0) - 1}
                             onClick={() => {
-                              const updated = [...formData.galleryItems];
+                              const updated = [...(formData.galleryItems || [])];
                               const temp = updated[index];
                               updated[index] = updated[index + 1];
                               updated[index + 1] = temp;
@@ -1614,7 +1662,7 @@ function StudioEditContent() {
                           type="text"
                           value={item.title || ""}
                           onChange={(e) => {
-                            const updated = [...formData.galleryItems];
+                            const updated = [...(formData.galleryItems || [])];
                             updated[index].title = e.target.value;
                             setFormData({ ...formData, galleryItems: updated });
                           }}
@@ -1630,8 +1678,8 @@ function StudioEditContent() {
                           <select
                             value={item.category || "Hackathons"}
                             onChange={(e) => {
-                              const updated = [...formData.galleryItems];
-                              updated[index].category = e.target.value;
+                              const updated = [...(formData.galleryItems || [])];
+                              updated[index].category = e.target.value as GalleryItem["category"];
                               setFormData({ ...formData, galleryItems: updated });
                             }}
                             className="w-full px-2 py-1 text-xs border border-slate-300 rounded"
@@ -1651,7 +1699,7 @@ function StudioEditContent() {
                             type="text"
                             value={item.year || "2026"}
                             onChange={(e) => {
-                              const updated = [...formData.galleryItems];
+                              const updated = [...(formData.galleryItems || [])];
                               updated[index].year = e.target.value;
                               setFormData({ ...formData, galleryItems: updated });
                             }}
@@ -1667,7 +1715,7 @@ function StudioEditContent() {
                         <button
                           type="button"
                           onClick={() => {
-                            const updated = formData.galleryItems.filter((_: any, i: number) => i !== index);
+                            const updated = (formData.galleryItems || []).filter((_: any, i: number) => i !== index);
                             setFormData({ ...formData, galleryItems: updated });
                           }}
                           className="text-red-500 hover:text-red-700 text-[11px] font-semibold flex items-center gap-0.5"
@@ -1862,13 +1910,13 @@ function StudioEditContent() {
                           type="button"
                           disabled={index === 0}
                           onClick={() => {
-                            const updated = [...formData.navbar.links];
+                            const updated = [...(formData.navbar?.links || [])];
                             const temp = updated[index];
                             updated[index] = updated[index - 1];
                             updated[index - 1] = temp;
                             setFormData({
                               ...formData,
-                              navbar: { ...formData.navbar, links: updated },
+                              navbar: { ...(formData.navbar || {}), links: updated },
                             });
                           }}
                           className="p-0.5 text-slate-400 hover:text-slate-700 disabled:opacity-20"
@@ -1877,15 +1925,15 @@ function StudioEditContent() {
                         </button>
                         <button
                           type="button"
-                          disabled={index === formData.navbar.links.length - 1}
+                          disabled={index === (formData.navbar?.links?.length || 0) - 1}
                           onClick={() => {
-                            const updated = [...formData.navbar.links];
+                            const updated = [...(formData.navbar?.links || [])];
                             const temp = updated[index];
                             updated[index] = updated[index + 1];
                             updated[index + 1] = temp;
                             setFormData({
                               ...formData,
-                              navbar: { ...formData.navbar, links: updated },
+                              navbar: { ...(formData.navbar || {}), links: updated },
                             });
                           }}
                           className="p-0.5 text-slate-400 hover:text-slate-700 disabled:opacity-20"
@@ -1899,11 +1947,11 @@ function StudioEditContent() {
                           type="text"
                           value={link.label || ""}
                           onChange={(e) => {
-                            const updated = [...formData.navbar.links];
+                            const updated = [...(formData.navbar?.links || [])];
                             updated[index].label = e.target.value;
                             setFormData({
                               ...formData,
-                              navbar: { ...formData.navbar, links: updated },
+                              navbar: { ...(formData.navbar || {}), links: updated },
                             });
                           }}
                           placeholder="Label"
@@ -1914,11 +1962,11 @@ function StudioEditContent() {
                           type="text"
                           value={link.href || ""}
                           onChange={(e) => {
-                            const updated = [...formData.navbar.links];
+                            const updated = [...(formData.navbar?.links || [])];
                             updated[index].href = e.target.value;
                             setFormData({
                               ...formData,
-                              navbar: { ...formData.navbar, links: updated },
+                              navbar: { ...(formData.navbar || {}), links: updated },
                             });
                           }}
                           placeholder="/route or https://..."
@@ -1935,10 +1983,10 @@ function StudioEditContent() {
                         <button
                           type="button"
                           onClick={() => {
-                            const updated = formData.navbar.links.filter((_: any, i: number) => i !== index);
+                            const updated = (formData.navbar?.links || []).filter((_: any, i: number) => i !== index);
                             setFormData({
                               ...formData,
-                              navbar: { ...formData.navbar, links: updated },
+                              navbar: { ...(formData.navbar || {}), links: updated },
                             });
                           }}
                           className="p-1 text-slate-400 hover:text-red-600"

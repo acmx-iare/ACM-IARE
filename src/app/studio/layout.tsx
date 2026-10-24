@@ -10,17 +10,39 @@ import {
 } from "lucide-react";
 import { AdminLogoutButton } from "@/components/admin/AdminLogoutButton";
 
+import { redirect } from "next/navigation";
+import { isAuthenticatedAdmin } from "@/lib/admin-auth";
+
 export const metadata = {
   title: "Website Studio CMS | ACM IARE",
   description: "Official Content Management System for ACM IARE Student Chapter public website",
 };
+
+export const instant = false;
 
 export default function StudioLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  return (
+    <React.Suspense
+      fallback={
+        <div className="min-h-screen flex items-center justify-center bg-slate-50 text-slate-500 text-xs">
+          Loading studio CMS...
+        </div>
+      }
+    >
+      <StudioAuthGuard>{children}</StudioAuthGuard>
+    </React.Suspense>
+  );
+}
 
+async function StudioAuthGuard({ children }: { children: React.ReactNode }) {
+  const isAuth = await isAuthenticatedAdmin();
+  if (!isAuth) {
+    redirect("/admin/login?from=/studio");
+  }
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-100 text-slate-800">

@@ -1,7 +1,7 @@
 import { MetadataRoute } from "next";
-import { CHAPTER_EVENTS } from "@/data/chapter";
+import { getAllEvents } from "@/lib/events-store";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = "https://acm.iare.ac.in";
 
   const staticPages: MetadataRoute.Sitemap = [
@@ -55,7 +55,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ];
 
-  const eventPages: MetadataRoute.Sitemap = CHAPTER_EVENTS.map((event) => ({
+  const events = await getAllEvents(false);
+  const eventPages: MetadataRoute.Sitemap = events.map((event) => ({
     url: `${baseUrl}/events/${event.slug}`,
     lastModified: new Date(event.date),
     changeFrequency: "weekly",

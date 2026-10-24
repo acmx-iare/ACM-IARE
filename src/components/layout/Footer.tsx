@@ -122,7 +122,7 @@ export function Footer() {
             </h3>
             <ul className="space-y-2.5 text-xs text-slate-400">
               <li className="flex items-start gap-2">
-                <MapPin className="w-4 h-4 text-blue-400 shrink-0 mt-0.5" />
+                <MapPin className="w-4 h-4 text-[#00b4d8] shrink-0 mt-0.5" />
                 <span>
                   Department of CSE, IARE,<br />
                   Dundigal, Hyderabad - 500043,<br />
@@ -130,7 +130,7 @@ export function Footer() {
                 </span>
               </li>
               <li className="flex items-center gap-2">
-                <Mail className="w-4 h-4 text-blue-400 shrink-0" />
+                <Mail className="w-4 h-4 text-[#00b4d8] shrink-0" />
                 <a
                   href={`mailto:${CHAPTER_INFO.contactEmail}`}
                   className="hover:text-white transition-colors"
@@ -139,11 +139,11 @@ export function Footer() {
                 </a>
               </li>
               <li className="flex items-center gap-2">
-                <Phone className="w-4 h-4 text-blue-400 shrink-0" />
+                <Phone className="w-4 h-4 text-[#00b4d8] shrink-0" />
                 <span>{CHAPTER_INFO.phone}</span>
               </li>
               <li className="flex items-center gap-2 pt-1">
-                <Globe className="w-4 h-4 text-blue-400 shrink-0" />
+                <Globe className="w-4 h-4 text-[#00b4d8] shrink-0" />
                 <a
                   href={CHAPTER_INFO.socials.iareWebsite}
                   target="_blank"

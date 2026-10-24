@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { getAuthenticatedAdminUser } from "@/lib/admin-auth";
 import { sql } from "@/lib/db";
 
-export async function GET(request: Request) {
+export async function GET() {
   try {
     const user = await getAuthenticatedAdminUser();
     if (!user || !user.isActive) {
@@ -33,6 +33,9 @@ export async function GET(request: Request) {
       auditLogs: auditLogs || [],
     });
   } catch (err: unknown) {
+    if (typeof err === "object" && err !== null && "digest" in err) {
+      throw err;
+    }
     console.error("Security info API error:", err);
     return NextResponse.json(
       { success: false, error: "Failed to retrieve security configuration." },

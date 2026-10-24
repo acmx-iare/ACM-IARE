@@ -16,7 +16,7 @@ const ALLOWED_MIME_TYPES = new Set([
 
 const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024; // 10MB
 
-export async function GET(request: Request) {
+export async function GET() {
   try {
     const user = await getAuthenticatedAdminUser();
     if (!user || !user.isActive) {

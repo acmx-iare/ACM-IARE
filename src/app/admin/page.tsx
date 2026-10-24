@@ -10,6 +10,7 @@ import {
   ExternalLink,
   Sparkles,
   Award,
+  KeyRound,
 } from "lucide-react";
 import { isAuthenticatedAdmin } from "@/lib/admin-auth";
 import { getAllEvents, getRegistrations } from "@/lib/events-store";
@@ -99,6 +100,32 @@ async function AdminDashboardContent() {
             <PlusCircle className="w-4 h-4" />
             New Event
           </Button>
+        </div>
+      </div>
+
+      {/* Administrator Credentials Banner */}
+      <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-gradient-to-r from-blue-50/50 to-white">
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 rounded-lg bg-blue-100/70 border border-blue-200 flex items-center justify-center text-blue-700 shrink-0">
+            <KeyRound className="w-4 h-4" />
+          </div>
+          <div>
+            <div className="text-xs font-bold text-[#14213d] flex items-center gap-2">
+              Administrator Credentials
+              <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                Active
+              </span>
+            </div>
+            <p className="text-[11px] text-slate-500">
+              Primary login password for admin portal, Google Apps Script automation, and CMS operations.
+            </p>
+          </div>
+        </div>
+        <div className="flex items-center gap-2 bg-slate-50 border border-slate-200 px-3 py-1.5 rounded-lg shrink-0">
+          <span className="text-xs text-slate-500 font-medium">Password:</span>
+          <code className="font-mono text-xs font-bold text-blue-700 select-all">
+            acmiare2026admin
+          </code>
         </div>
       </div>
 

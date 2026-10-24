@@ -14,7 +14,7 @@ import {
 import { CHAPTER_INFO, TECHNICAL_SIGS, FREQUENTLY_ASKED_QUESTIONS } from "@/data/chapter";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { Button } from "@/components/ui/Button";
-import { getCmsPublishedContent } from "@/lib/cms-store";
+import { getCmsPublishedContent, type CmsAboutContent } from "@/lib/cms-store";
 
 export const metadata = {
   title: "About the Chapter",
@@ -37,7 +37,7 @@ export default function AboutPage() {
 }
 
 async function AboutPageContent() {
-  const cms = await getCmsPublishedContent("about");
+  const cms = await getCmsPublishedContent<CmsAboutContent>("about");
   const hero = cms.hero || {};
   const mission = cms.mission || CHAPTER_INFO.mission;
   const vision = cms.vision || CHAPTER_INFO.vision;
@@ -45,11 +45,11 @@ async function AboutPageContent() {
   return (
     <div className="flex flex-col">
       {/* Header Banner */}
-      <section className="section-space border-b border-slate-200 bg-slate-50">
+      <section className="section-space border-b border-slate-200 brand-subtle-bg">
         <div className="site-container">
           <div className="hero-enter max-w-3xl space-y-4">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-800 border border-blue-200">
-              <School className="w-3.5 h-3.5 text-blue-600" />
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md text-xs font-semibold bg-teal-50/80 text-[#007a91] border border-[#0097b2]/30">
+              <School className="w-3.5 h-3.5 text-[#0097b2]" />
               Institutional Profile &amp; Charter
             </div>
             <h1 className="display-heading font-extrabold text-[#14213d]">
@@ -74,16 +74,16 @@ async function AboutPageContent() {
                 title="A Community Rooted in Academic Rigor"
               />
               <p className="text-sm sm:text-base text-slate-700 leading-relaxed">
-                The <strong className="text-[#14213d]">Institute of Aeronautical Engineering (IARE)</strong>, established in 1994, is a premier autonomous engineering college in Hyderabad, accredited with <strong className="text-blue-700">&apos;A++&apos; Grade by NAAC</strong> and affiliated with Jawaharlal Nehru Technological University Hyderabad (JNTUH).
+                The <strong className="text-[#14213d]">Institute of Aeronautical Engineering (IARE)</strong>, established in 1994, is a premier autonomous engineering college in Hyderabad, accredited with <strong className="text-[#007a91]">&apos;A++&apos; Grade by NAAC</strong> and affiliated with Jawaharlal Nehru Technological University Hyderabad (JNTUH).
               </p>
               <p className="text-sm sm:text-base text-slate-700 leading-relaxed">
                 The ACM Student Chapter was chartered to cultivate a peer-led culture of computer science research and open collaboration among undergraduate and postgraduate students. Operating under the departmental stewardship of Computer Science &amp; Engineering and Information Technology, the chapter upholds the standards established by the global Association for Computing Machinery.
               </p>
 
               {/* Crucial Institutional Notice Box */}
-              <div className="p-5 rounded-md bg-blue-50/70 border border-blue-200 text-xs sm:text-sm text-slate-700 leading-relaxed space-y-2">
-                <div className="flex items-center gap-2 font-bold text-blue-900">
-                  <ShieldCheck className="w-4 h-4 text-blue-700" />
+              <div className="p-5 rounded-md bg-teal-50/60 border border-teal-200 text-xs sm:text-sm text-slate-700 leading-relaxed space-y-2">
+                <div className="flex items-center gap-2 font-bold text-[#005f71]">
+                  <ShieldCheck className="w-4 h-4 text-[#0097b2]" />
                   Official Membership Distinction
                 </div>
                 <p>
@@ -93,9 +93,9 @@ async function AboutPageContent() {
             </div>
 
             <div className="lg:col-span-5 space-y-4">
-              <div className="bg-slate-50 border border-slate-200 rounded-lg p-6 space-y-4">
+              <div className="bg-slate-50 border border-slate-200 rounded-lg p-6 space-y-4 shadow-xs">
                 <div className="flex items-center gap-3 pb-3 border-b border-slate-200">
-                  <div className="w-12 h-12 bg-white rounded border border-slate-200 p-1 shrink-0">
+                  <div className="w-12 h-12 bg-white rounded border border-[#0097b2]/40 p-1 shrink-0 shadow-xs">
                     <Image
                       src="/images/acm-iare-logo.jpg"
                       alt="ACM IARE Logo"
@@ -133,7 +133,7 @@ async function AboutPageContent() {
                       href="https://www.acm.org"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="font-semibold text-blue-600 hover:underline inline-flex items-center gap-0.5"
+                      className="font-semibold text-[#0097b2] hover:underline inline-flex items-center gap-0.5"
                     >
                       acm.org <ExternalLink className="w-3 h-3" />
                     </a>
@@ -147,11 +147,11 @@ async function AboutPageContent() {
       </section>
 
       {/* Mission & Vision */}
-      <section className="section-space bg-slate-50 border-b border-slate-200">
+      <section className="section-space brand-subtle-bg border-b border-slate-200">
         <div className="site-container">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="academic-card p-8 bg-white">
-              <div className="w-10 h-10 rounded-md bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-700 mb-4">
+              <div className="w-10 h-10 rounded-md bg-teal-50 border border-teal-200 flex items-center justify-center text-[#007a91] mb-4">
                 <Compass className="w-5 h-5" />
               </div>
               <h2 className="text-xl font-bold text-[#14213d] mb-3">Our Mission</h2>
@@ -160,22 +160,22 @@ async function AboutPageContent() {
               </p>
               <ul className="mt-4 space-y-2 text-xs text-slate-700">
                 <li className="flex items-center gap-2">
-                  <CheckCircle className="w-3.5 h-3.5 text-blue-600 shrink-0" />
+                  <CheckCircle className="w-3.5 h-3.5 text-[#0097b2] shrink-0" />
                   Cultivating rigorous algorithmic problem-solving habits
                 </li>
                 <li className="flex items-center gap-2">
-                  <CheckCircle className="w-3.5 h-3.5 text-blue-600 shrink-0" />
+                  <CheckCircle className="w-3.5 h-3.5 text-[#0097b2] shrink-0" />
                   Demystifying systems programming and open-source contribution
                 </li>
                 <li className="flex items-center gap-2">
-                  <CheckCircle className="w-3.5 h-3.5 text-blue-600 shrink-0" />
+                  <CheckCircle className="w-3.5 h-3.5 text-[#0097b2] shrink-0" />
                   Encouraging undergraduate research paper publication
                 </li>
               </ul>
             </div>
 
             <div className="academic-card p-8 bg-white">
-              <div className="w-10 h-10 rounded-md bg-teal-50 border border-teal-200 flex items-center justify-center text-teal-700 mb-4">
+              <div className="w-10 h-10 rounded-md bg-teal-50 border border-teal-200 flex items-center justify-center text-[#007a91] mb-4">
                 <Award className="w-5 h-5" />
               </div>
               <h2 className="text-xl font-bold text-[#14213d] mb-3">Our Vision</h2>
@@ -184,15 +184,15 @@ async function AboutPageContent() {
               </p>
               <ul className="mt-4 space-y-2 text-xs text-slate-700">
                 <li className="flex items-center gap-2">
-                  <CheckCircle className="w-3.5 h-3.5 text-teal-600 shrink-0" />
+                  <CheckCircle className="w-3.5 h-3.5 text-[#0097b2] shrink-0" />
                   Ranked among premier student chapters across ACM India
                 </li>
                 <li className="flex items-center gap-2">
-                  <CheckCircle className="w-3.5 h-3.5 text-teal-600 shrink-0" />
+                  <CheckCircle className="w-3.5 h-3.5 text-[#0097b2] shrink-0" />
                   Consistent collegiate representation at regional &amp; world ICPC finals
                 </li>
                 <li className="flex items-center gap-2">
-                  <CheckCircle className="w-3.5 h-3.5 text-teal-600 shrink-0" />
+                  <CheckCircle className="w-3.5 h-3.5 text-[#0097b2] shrink-0" />
                   Graduating engineers grounded in computing ethics and technical leadership
                 </li>
               </ul>
@@ -214,7 +214,7 @@ async function AboutPageContent() {
             {TECHNICAL_SIGS.map((sig) => (
               <div key={sig.id} className="academic-card p-6 sm:p-8 space-y-5">
                 <div>
-                  <span className="text-xs font-bold text-blue-700 bg-blue-50 border border-blue-200 px-2 py-0.5 rounded">
+                  <span className="text-xs font-bold text-[#007a91] bg-teal-50 border border-teal-200 px-2 py-0.5 rounded">
                     {sig.shortName}
                   </span>
                   <h3 className="text-xl font-bold text-[#14213d] mt-2">
@@ -248,7 +248,7 @@ async function AboutPageContent() {
                   <ul className="space-y-1 text-xs text-slate-600">
                     {sig.activities.map((act, i) => (
                       <li key={i} className="flex items-center gap-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-blue-600 shrink-0"></span>
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#0097b2] shrink-0"></span>
                         {act}
                       </li>
                     ))}
@@ -261,7 +261,7 @@ async function AboutPageContent() {
       </section>
 
       {/* Chapter Governance & Bylaws Summary */}
-      <section className="section-space bg-slate-50 border-b border-slate-200">
+      <section className="section-space brand-subtle-bg border-b border-slate-200">
         <div className="site-container">
           <SectionHeader
             badge="Chapter Governance"
@@ -270,18 +270,18 @@ async function AboutPageContent() {
           />
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="p-6 bg-white border border-slate-200 rounded-lg space-y-3">
-              <div className="w-8 h-8 rounded bg-slate-100 flex items-center justify-center text-slate-700">
+            <div className="academic-card p-6 space-y-3">
+              <div className="w-8 h-8 rounded bg-teal-50 border border-teal-100 flex items-center justify-center text-[#007a91]">
                 <FileText className="w-4 h-4" />
               </div>
               <h3 className="font-bold text-sm text-[#14213d]">Annual Democratic Elections</h3>
               <p className="text-xs text-slate-600 leading-relaxed">
-                Council officers (Chair, Vice-Chair, Secretary, Treasurer) are elected each academic spring from eligible active members in good standing.
+                Council officers (Chairperson, Vice Chairperson, Webmaster, Secretary, Treasurer) are elected each academic spring from eligible active members in good standing.
               </p>
             </div>
 
-            <div className="p-6 bg-white border border-slate-200 rounded-lg space-y-3">
-              <div className="w-8 h-8 rounded bg-slate-100 flex items-center justify-center text-slate-700">
+            <div className="academic-card p-6 space-y-3">
+              <div className="w-8 h-8 rounded bg-teal-50 border border-teal-100 flex items-center justify-center text-[#007a91]">
                 <Users className="w-4 h-4" />
               </div>
               <h3 className="font-bold text-sm text-[#14213d]">Faculty Oversight &amp; Audit</h3>
@@ -290,8 +290,8 @@ async function AboutPageContent() {
               </p>
             </div>
 
-            <div className="p-6 bg-white border border-slate-200 rounded-lg space-y-3">
-              <div className="w-8 h-8 rounded bg-slate-100 flex items-center justify-center text-slate-700">
+            <div className="academic-card p-6 space-y-3">
+              <div className="w-8 h-8 rounded bg-teal-50 border border-teal-100 flex items-center justify-center text-[#007a91]">
                 <BookOpen className="w-4 h-4" />
               </div>
               <h3 className="font-bold text-sm text-[#14213d]">ACM Code of Ethics</h3>
@@ -317,7 +317,7 @@ async function AboutPageContent() {
             {FREQUENTLY_ASKED_QUESTIONS.map((faq, idx) => (
               <div
                 key={idx}
-                className="p-5 rounded-lg border border-slate-200 bg-slate-50/50 space-y-2"
+                className="p-5 rounded-lg border border-slate-200 bg-slate-50/50 space-y-2 hover:border-[#0097b2]/40 transition-colors"
               >
                 <h3 className="text-sm sm:text-base font-bold text-[#14213d]">
                   {faq.question}

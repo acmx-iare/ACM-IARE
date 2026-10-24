@@ -116,11 +116,11 @@ export function GalleryClient({
   return (
     <div className="flex flex-col min-h-screen bg-slate-50">
       {/* Header Banner */}
-      <section className="section-space border-b border-slate-200 bg-white">
+      <section className="section-space border-b border-slate-200 bg-white brand-subtle-bg">
         <div className="site-container">
           <div className="hero-enter max-w-3xl space-y-3">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-800 border border-blue-200">
-              <Camera className="w-3.5 h-3.5 text-blue-600" />
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md text-xs font-semibold bg-teal-50/80 text-[#007a91] border border-[#0097b2]/30">
+              <Camera className="w-3.5 h-3.5 text-[#0097b2]" />
               {hero.badge || "Archives & Competitive Milestones"}
             </div>
             <h1 className="display-heading font-extrabold text-[#14213d]">
@@ -153,7 +153,7 @@ export function GalleryClient({
                 >
                   <div>
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-bold text-blue-700 bg-blue-50 border border-blue-200 px-2 py-0.5 rounded">
+                      <span className="text-xs font-bold text-[#007a91] bg-teal-50 border border-teal-200 px-2 py-0.5 rounded">
                         {achievement.year}
                       </span>
                       <Award className="w-4 h-4 text-amber-500" />
@@ -180,7 +180,7 @@ export function GalleryClient({
         <section>
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
             <div>
-              <span className="text-xs font-bold text-blue-700 uppercase tracking-wider block mb-1">
+              <span className="text-xs font-bold text-[#007a91] uppercase tracking-wider block mb-1">
                 Visual Documentation
               </span>
               <h2 className="text-2xl font-bold text-[#14213d]">Event Gallery</h2>
@@ -195,7 +195,7 @@ export function GalleryClient({
                   role="tab"
                   aria-selected={selectedCategory === cat}
                   onClick={() => setSelectedCategory(cat)}
-                  className={`min-h-10 px-3 py-2 rounded-md text-xs font-semibold transition-colors motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 ${
+                  className={`min-h-10 px-3 py-2 rounded-md text-xs font-semibold transition-colors motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0097b2] ${
                     selectedCategory === cat
                       ? "bg-[#14213d] text-white shadow-xs"
                       : "bg-white border border-slate-200 text-slate-700 hover:bg-slate-100"
@@ -239,10 +239,10 @@ export function GalleryClient({
 
                 <div className="p-5 space-y-2">
                   <div className="flex items-center gap-1.5 text-xs text-slate-400 font-medium">
-                    <Calendar className="w-3.5 h-3.5 text-blue-600" />
+                    <Calendar className="w-3.5 h-3.5 text-[#0097b2]" />
                     <span>{item.date}</span>
                   </div>
-                  <h3 className="text-sm font-bold text-[#14213d] group-hover:text-blue-700 transition-colors line-clamp-1">
+                  <h3 className="text-sm font-bold text-[#14213d] group-hover:text-[#0097b2] transition-colors line-clamp-1">
                     {item.title}
                   </h3>
                   <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed">

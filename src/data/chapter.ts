@@ -283,6 +283,67 @@ export const CHAPTER_EVENTS: ChapterEvent[] = [
   },
 ];
 
+export const CORE_OFFICE_BEARERS: TeamMember[] = [
+  {
+    id: "team-04",
+    name: "K. Sai Charan",
+    role: "Chairperson",
+    category: "Office Bearers",
+    department: "Computer Science & Engineering",
+    academicYear: "Final Year (B.Tech IV)",
+    bio: "Oversees executive strategy, chapter operations, national ACM student consortium liaisons, and technical event execution.",
+    imageUrl: "/images/team/chair.jpg",
+    linkedin: "https://www.linkedin.com/in/acm-iare-chair",
+    github: "https://github.com/charan-iare",
+  },
+  {
+    id: "team-05",
+    name: "M. Sneha Reddy",
+    role: "Vice Chairperson",
+    category: "Office Bearers",
+    department: "Computer Science & Engineering (AI & ML)",
+    academicYear: "Pre-Final Year (B.Tech III)",
+    bio: "Directs internal technical initiatives, SIG cohorts, women in computing mentorship circles, and cross-department collaboration.",
+    imageUrl: "/images/team/vice-chair.jpg",
+    linkedin: "https://www.linkedin.com/in/sneha-reddy-iare",
+    github: "https://github.com/sneha-acm",
+  },
+  {
+    id: "team-08",
+    name: "G. Teja Vardhan",
+    role: "Webmaster",
+    category: "Office Bearers",
+    department: "Computer Science & Engineering",
+    academicYear: "Pre-Final Year (B.Tech III)",
+    bio: "Architects chapter digital portals, contest testbeds, infrastructure deployment, and student developer open-source repositories.",
+    imageUrl: "/images/team/webmaster.jpg",
+    github: "https://github.com/teja-iare",
+    linkedin: "https://www.linkedin.com/in/teja-acm",
+  },
+  {
+    id: "team-06",
+    name: "R. Pranav Varma",
+    role: "Secretary",
+    category: "Office Bearers",
+    department: "Information Technology",
+    academicYear: "Pre-Final Year (B.Tech III)",
+    bio: "Maintains chapter documentation, annual reporting to ACM India Student Chapter council, and academic coordination.",
+    imageUrl: "/images/team/secretary.jpg",
+    linkedin: "https://www.linkedin.com/in/pranav-varma-iare",
+  },
+  {
+    id: "team-07",
+    name: "V. Ananya",
+    role: "Treasurer",
+    category: "Office Bearers",
+    department: "Computer Science & Engineering",
+    academicYear: "Pre-Final Year (B.Tech III)",
+    bio: "Manages chapter budget allocations, sponsorship documentation, audit compliance, and resource distribution.",
+    imageUrl: "/images/team/treasurer.jpg",
+    linkedin: "https://www.linkedin.com/in/ananya-v-iare",
+  },
+];
+
 export const CHAPTER_TEAM: TeamMember[] = [
   {
     id: "team-01",

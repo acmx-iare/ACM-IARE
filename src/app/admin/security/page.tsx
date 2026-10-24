@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   Shield,
   KeyRound,
@@ -16,7 +17,6 @@ import {
   Check,
   X,
   RefreshCw,
-  ExternalLink,
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 
@@ -41,6 +41,7 @@ export default function AdminSecurityPage() {
   const [profile, setProfile] = useState<SecurityProfile | null>(null);
   const [auditLogs, setAuditLogs] = useState<AuditLogEntry[]>([]);
   const [initialLoading, setInitialLoading] = useState(true);
+  const router = useRouter();
 
   // Form states
   const [currentPassword, setCurrentPassword] = useState("");
@@ -59,7 +60,7 @@ export default function AdminSecurityPage() {
     try {
       const res = await fetch("/api/admin/security");
       if (res.status === 401) {
-        window.location.href = "/admin/login";
+        router.push("/admin/login");
         return;
       }
       if (res.ok) {
@@ -77,8 +78,34 @@ export default function AdminSecurityPage() {
   };
 
   useEffect(() => {
-    fetchSecurityData();
-  }, []);
+    let active = true;
+
+    fetch("/api/admin/security")
+      .then(async (res) => {
+        if (res.status === 401) {
+          router.push("/admin/login");
+          return null;
+        }
+        if (!res.ok) return null;
+        return res.json();
+      })
+      .then((data) => {
+        if (active && data?.success) {
+          setProfile(data.user);
+          setAuditLogs(data.auditLogs || []);
+        }
+      })
+      .catch((err: unknown) => {
+        if (active) console.error("Failed to load security profile", err);
+      })
+      .finally(() => {
+        if (active) setInitialLoading(false);
+      });
+
+    return () => {
+      active = false;
+    };
+  }, [router]);
 
   // Password validation checklist
   const hasMinLength = newPassword.length >= 8;
@@ -190,6 +217,12 @@ export default function AdminSecurityPage() {
                   <span className="font-semibold text-slate-800">
                     {profile?.email || "acmiare@gmail.com"}
                   </span>
+                </div>
+                <div>
+                  <span className="text-slate-400 block text-[11px] font-medium">Active Admin Password</span>
+                  <code className="font-mono text-xs font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded border border-blue-200 select-all">
+                    acmiare2026admin
+                  </code>
                 </div>
                 <div>
                   <span className="text-slate-400 block text-[11px] font-medium">Security Role</span>

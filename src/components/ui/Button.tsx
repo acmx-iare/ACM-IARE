@@ -13,14 +13,14 @@ export interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant = "primary", size = "md", href, isExternal, children, onClick, ...props }, ref) => {
     const baseStyles =
-      "inline-flex min-h-11 items-center justify-center rounded-md font-medium touch-manipulation transition-[color,background-color,border-color,box-shadow,transform] duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 active:translate-y-0 active:scale-[0.98] motion-reduce:transition-none";
+      "inline-flex min-h-11 items-center justify-center rounded-md font-medium touch-manipulation transition-[color,background-color,border-color,box-shadow,transform] duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0097b2] focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 active:translate-y-0 active:scale-[0.98] motion-reduce:transition-none";
 
     const variantStyles = {
-      primary: "bg-[#14213d] text-white shadow-sm hover:bg-[#0b1324]",
-      secondary: "bg-blue-600 text-white shadow-sm hover:bg-blue-700",
-      outline: "border border-slate-300 bg-white text-slate-800 hover:border-slate-400 hover:bg-slate-50",
+      primary: "bg-[#14213d] text-white shadow-xs hover:bg-[#0b1324]",
+      secondary: "bg-[#0097b2] text-white shadow-xs hover:bg-[#007a91] active:bg-[#005f71]",
+      outline: "border border-slate-300 bg-white text-slate-800 hover:border-[#0097b2]/40 hover:bg-teal-50/40 hover:text-slate-900",
       ghost: "text-slate-700 hover:bg-slate-100 hover:text-slate-900",
-      danger: "bg-red-600 text-white shadow-sm hover:bg-red-700",
+      danger: "bg-red-600 text-white shadow-xs hover:bg-red-700",
     };
 
     const sizeStyles = {

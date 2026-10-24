@@ -49,19 +49,19 @@ export function Navbar() {
       {/* Skip to Main Content Link for accessibility */}
       <a
         href="#main-content"
-        className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:px-4 focus:py-2 focus:bg-blue-600 focus:text-white focus:rounded-md focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-white"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:px-4 focus:py-2 focus:bg-[#0097b2] focus:text-white focus:rounded-md focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-white"
       >
         Skip to main content
       </a>
 
       {/* Main Navigation Header */}
-      <header className="sticky top-0 z-40 border-b border-slate-200/90 bg-white">
+      <header className="sticky top-0 z-40 border-b border-slate-200/90 bg-white/95 backdrop-blur-xs">
         <div className="site-container">
           <div className="flex h-16 items-center justify-between gap-3 sm:h-20">
             {/* Logo and Brand Title */}
             <Link
               href="/"
-              className="group flex min-w-0 items-center gap-2.5 rounded-md py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 sm:gap-3.5"
+              className="group flex min-w-0 items-center gap-2.5 rounded-md py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#0097b2] sm:gap-3.5"
             >
               <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-md border border-slate-200 bg-white p-0.5 shadow-xs sm:h-12 sm:w-12">
                 <Image
@@ -75,7 +75,7 @@ export function Navbar() {
               </div>
               <div className="flex flex-col">
                 <div className="flex items-center gap-1.5">
-                  <span className="text-[clamp(0.72rem,2.5vw,1rem)] font-extrabold leading-tight tracking-tight text-[#14213d] transition-colors group-hover:text-blue-700">
+                  <span className="text-[clamp(0.72rem,2.5vw,1rem)] font-extrabold leading-tight tracking-tight text-[#14213d] transition-colors group-hover:text-[#0097b2]">
                     ACM STUDENT CHAPTER
                   </span>
                 </div>
@@ -96,8 +96,8 @@ export function Navbar() {
                     className={cn(
                       "px-3.5 py-2 text-sm font-semibold rounded-md transition-colors",
                       isActive
-                        ? "text-blue-700 bg-blue-50/70"
-                        : "text-slate-700 hover:text-[#14213d] hover:bg-slate-100"
+                        ? "text-[#007a91] bg-teal-50/90 font-bold border-b-2 border-[#0097b2]"
+                        : "text-slate-700 hover:text-[#0097b2] hover:bg-slate-50"
                     )}
                     aria-current={isActive ? "page" : undefined}
                   >
@@ -167,7 +167,7 @@ export function Navbar() {
                     className={cn(
                       "flex items-center justify-between px-3.5 py-2.5 text-base font-semibold rounded-md transition-colors",
                       isActive
-                        ? "text-blue-700 bg-blue-50"
+                        ? "text-[#007a91] bg-teal-50 font-bold"
                         : "text-slate-800 hover:bg-slate-100"
                     )}
                     aria-current={isActive ? "page" : undefined}

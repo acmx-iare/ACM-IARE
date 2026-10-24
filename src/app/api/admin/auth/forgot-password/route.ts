@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { createPasswordResetToken } from "@/lib/admin-auth";
-import { sendPasswordResetEmail, DESIGNATED_RECOVERY_EMAIL } from "@/lib/email";
+import { sendPasswordResetEmail } from "@/lib/email";
 
 // Simple in-memory rate limiting: 5 requests per IP per 15 minutes
 const rateLimitMap = new Map<string, { count: number; expiresAt: number }>();

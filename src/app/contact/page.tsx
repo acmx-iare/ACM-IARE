@@ -156,11 +156,11 @@ export default function ContactPage() {
   return (
     <div className="flex flex-col min-h-screen bg-slate-50">
       {/* Header Banner */}
-      <section className="bg-white border-b border-slate-200 section-space">
+      <section className="bg-white border-b border-slate-200 brand-subtle-bg section-space">
         <div className="site-container">
           <div className="hero-enter max-w-3xl space-y-3">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-800 border border-blue-200">
-              <Mail className="w-3.5 h-3.5 text-blue-600" />
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md text-xs font-semibold bg-teal-50/80 text-[#007a91] border border-[#0097b2]/30">
+              <Mail className="w-3.5 h-3.5 text-[#0097b2]" />
               Chapter Engagement Desk
             </div>
             <h1 className="display-heading font-extrabold text-[#14213d]">
@@ -189,7 +189,7 @@ export default function ContactPage() {
                   onClick={() => setActiveTab("join")}
                   className={`flex min-h-14 flex-1 items-center justify-center gap-2 border-b-2 px-2 py-3.5 text-center text-xs font-bold transition-colors motion-reduce:transition-none sm:px-4 sm:text-sm ${
                     activeTab === "join"
-                      ? "border-blue-600 text-blue-700 bg-white"
+                      ? "border-[#0097b2] text-[#007a91] bg-white"
                       : "border-transparent text-slate-600 hover:text-slate-900"
                   }`}
                 >
@@ -202,7 +202,7 @@ export default function ContactPage() {
                   onClick={() => setActiveTab("contact")}
                   className={`flex min-h-14 flex-1 items-center justify-center gap-2 border-b-2 px-2 py-3.5 text-center text-xs font-bold transition-colors motion-reduce:transition-none sm:px-4 sm:text-sm ${
                     activeTab === "contact"
-                      ? "border-blue-600 text-blue-700 bg-white"
+                      ? "border-[#0097b2] text-[#007a91] bg-white"
                       : "border-transparent text-slate-600 hover:text-slate-900"
                   }`}
                 >
@@ -634,7 +634,7 @@ export default function ContactPage() {
             {/* Campus Office Details Card */}
             <div className="bg-white border border-slate-200 rounded-lg p-6 sm:p-8 space-y-6 shadow-xs">
               <div className="pb-4 border-b border-slate-100">
-                <span className="text-xs font-bold uppercase tracking-wider text-blue-700 block mb-1">
+                <span className="text-xs font-bold uppercase tracking-wider text-[#007a91] block mb-1">
                   Institutional Secretariat
                 </span>
                 <h3 className="text-lg font-bold text-[#14213d]">Campus Chapter Office</h3>
@@ -645,7 +645,7 @@ export default function ContactPage() {
 
               <div className="space-y-4 text-xs sm:text-sm text-slate-700">
                 <div className="flex items-start gap-3">
-                  <MapPin className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
+                  <MapPin className="w-4 h-4 text-[#0097b2] shrink-0 mt-0.5" />
                   <div>
                     <strong className="block text-[#14213d]">Postal Address:</strong>
                     <span>
@@ -658,20 +658,20 @@ export default function ContactPage() {
                 </div>
 
                 <div className="flex items-start gap-3">
-                  <Mail className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
+                  <Mail className="w-4 h-4 text-[#0097b2] shrink-0 mt-0.5" />
                   <div>
                     <strong className="block text-[#14213d]">Official Correspondence:</strong>
-                    <a href={`mailto:${CHAPTER_INFO.contactEmail}`} className="text-blue-600 hover:underline block">
+                    <a href={`mailto:${CHAPTER_INFO.contactEmail}`} className="text-[#0097b2] hover:text-[#007a91] hover:underline block">
                       {CHAPTER_INFO.contactEmail}
                     </a>
-                    <a href={`mailto:${CHAPTER_INFO.facultyEmail}`} className="text-slate-500 hover:underline text-xs block mt-0.5">
+                    <a href={`mailto:${CHAPTER_INFO.facultyEmail}`} className="text-slate-500 hover:text-slate-700 hover:underline text-xs block mt-0.5">
                       Faculty Advisor: {CHAPTER_INFO.facultyEmail}
                     </a>
                   </div>
                 </div>
 
                 <div className="flex items-start gap-3">
-                  <Phone className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
+                  <Phone className="w-4 h-4 text-[#0097b2] shrink-0 mt-0.5" />
                   <div>
                     <strong className="block text-[#14213d]">College Telephones:</strong>
                     <span>{CHAPTER_INFO.phone}</span>
@@ -679,7 +679,7 @@ export default function ContactPage() {
                 </div>
 
                 <div className="flex items-start gap-3">
-                  <Clock className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
+                  <Clock className="w-4 h-4 text-[#0097b2] shrink-0 mt-0.5" />
                   <div>
                     <strong className="block text-[#14213d]">Campus Working Hours:</strong>
                     <span>Monday – Saturday: 09:00 AM – 04:30 PM IST</span>

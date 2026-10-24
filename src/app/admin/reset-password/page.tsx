@@ -5,7 +5,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 import {
-  Lock,
   ArrowRight,
   AlertCircle,
   CheckCircle2,
@@ -30,10 +29,15 @@ function ResetPasswordContent() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   // Token validation state
-  const [verifying, setVerifying] = useState(true);
+  const [validatedToken, setValidatedToken] = useState<string | null>(null);
   const [tokenValid, setTokenValid] = useState<boolean | null>(null);
   const [tokenError, setTokenError] = useState<string | null>(null);
   const [accountEmail, setAccountEmail] = useState<string | null>(null);
+  const isVerifying = Boolean(token) && validatedToken !== token;
+  const isTokenValid = Boolean(token) && tokenValid === true;
+  const displayedTokenError = token
+    ? tokenError
+    : "Missing password recovery token in link. Please request a new recovery link.";
 
   // Submission state
   const [loading, setLoading] = useState(false);
@@ -41,33 +45,39 @@ function ResetPasswordContent() {
   const [success, setSuccess] = useState(false);
 
   useEffect(() => {
-    if (!token) {
-      setVerifying(false);
-      setTokenValid(false);
-      setTokenError("Missing password recovery token in link. Please request a new recovery link.");
-      return;
-    }
+    if (!token) return;
+
+    let active = true;
 
     async function checkToken() {
       try {
         const res = await fetch(`/api/admin/auth/reset-password?token=${encodeURIComponent(token)}`);
         const data = await res.json();
-        if (res.ok && data.valid) {
+        if (active && res.ok && data.valid) {
           setTokenValid(true);
+          setTokenError(null);
           setAccountEmail(data.email || null);
-        } else {
+        } else if (active) {
           setTokenValid(false);
           setTokenError(data.error || "This recovery link is invalid or has expired.");
+          setAccountEmail(null);
         }
       } catch {
-        setTokenValid(false);
-        setTokenError("Unable to verify link validity. Please check your connection.");
+        if (active) {
+          setTokenValid(false);
+          setTokenError("Unable to verify link validity. Please check your connection.");
+          setAccountEmail(null);
+        }
       } finally {
-        setVerifying(false);
+        if (active) setValidatedToken(token);
       }
     }
 
-    checkToken();
+    void checkToken();
+
+    return () => {
+      active = false;
+    };
   }, [token]);
 
   // Validation rules
@@ -135,18 +145,18 @@ function ResetPasswordContent() {
           </p>
         </div>
 
-        {verifying ? (
+        {isVerifying ? (
           <div className="py-12 flex flex-col items-center justify-center gap-3 text-slate-500 text-xs">
             <Loader2 className="w-6 h-6 animate-spin text-blue-600" />
             <span>Verifying recovery link authenticity...</span>
           </div>
-        ) : !tokenValid ? (
+        ) : !isTokenValid ? (
           <div className="space-y-4">
             <div className="p-4 bg-amber-50 border border-amber-200 rounded-lg text-xs text-amber-800 flex items-start gap-3">
               <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
               <div>
                 <p className="font-semibold text-amber-900 mb-1">Recovery Link Expired or Invalid</p>
-                <p className="text-amber-700 leading-relaxed">{tokenError}</p>
+                <p className="text-amber-700 leading-relaxed">{displayedTokenError}</p>
               </div>
             </div>
 

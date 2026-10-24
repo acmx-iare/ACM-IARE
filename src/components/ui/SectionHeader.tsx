@@ -32,7 +32,7 @@ export function SectionHeader({
     >
       <div className={cn("min-w-0 max-w-2xl", align === "center" && "mx-auto")}>
         {badge && (
-          <div className="mb-3 inline-flex items-center border-l-2 border-blue-600 bg-blue-50/70 px-2.5 py-1 text-sm font-semibold text-blue-800">
+          <div className="mb-2.5 inline-flex items-center border-l-2 border-[#0097b2] bg-teal-50/80 px-2.5 py-0.5 text-xs font-bold uppercase tracking-wider text-[#007a91]">
             {badge}
           </div>
         )}
@@ -40,7 +40,7 @@ export function SectionHeader({
           {title}
         </h2>
         {description && (
-          <p className="lead-copy mt-3 text-sm sm:text-base">
+          <p className="lead-copy mt-2.5 text-sm sm:text-base">
             {description}
           </p>
         )}
@@ -50,7 +50,7 @@ export function SectionHeader({
         <div className="shrink-0 md:pb-1">
           <Link
             href={actionHref}
-            className="inline-flex items-center text-sm font-semibold text-blue-600 hover:text-blue-800 transition-colors group"
+            className="inline-flex items-center text-sm font-semibold text-[#0097b2] hover:text-[#007a91] transition-colors group"
           >
             {actionText}
             <ArrowRight className="ml-1.5 w-4 h-4 transition-transform group-hover:translate-x-1" />

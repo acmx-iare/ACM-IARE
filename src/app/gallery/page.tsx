@@ -1,6 +1,6 @@
 import React from "react";
 import { GALLERY_ITEMS, CHAPTER_ACHIEVEMENTS } from "@/data/chapter";
-import { getCmsPublishedContent } from "@/lib/cms-store";
+import { getCmsPublishedContent, type CmsGalleryContent } from "@/lib/cms-store";
 import { GalleryClient } from "./GalleryClient";
 
 export const metadata = {
@@ -24,7 +24,7 @@ export default function GalleryPage() {
 }
 
 async function GalleryPageContent() {
-  const cms = await getCmsPublishedContent("gallery");
+  const cms = await getCmsPublishedContent<CmsGalleryContent>("gallery");
   const galleryItems =
     cms.galleryItems && cms.galleryItems.length > 0
       ? cms.galleryItems

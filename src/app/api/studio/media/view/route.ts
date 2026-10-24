@@ -15,8 +15,9 @@ export async function GET(request: NextRequest) {
     }
 
     const { buffer, contentType } = await getFileBuffer(key);
+    const responseBody = new Uint8Array(buffer);
 
-    return new NextResponse(buffer as any, {
+    return new NextResponse(responseBody, {
       status: 200,
       headers: {
         "Content-Type": contentType,
@@ -25,6 +26,9 @@ export async function GET(request: NextRequest) {
       },
     });
   } catch (err: unknown) {
+    if (typeof err === "object" && err !== null && "digest" in err) {
+      throw err;
+    }
     console.warn("Media view notice:", err);
     return new NextResponse("File not found or unreachable", { status: 404 });
   }
